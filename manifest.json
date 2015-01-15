@@ -10,7 +10,9 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "https://secure.flickr.com/"
+    "tabs"
   ],
   "content_security_policy": "script-src 'self' https://code.jquery.com; object-src 'self'"
 }
+
+// vim: set expandtab ts=2 sw=2:
