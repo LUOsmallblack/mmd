@@ -2,7 +2,12 @@ console.log(location.href);
 console.log($.fn.jquery);
 $(function(){
   $("#buttonUrl").click(function(){
-    console.log(location.href);
+    chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT},
+      function(tabs) {
+        console.log(tabs[0].url);
+        $("#textUrl").text(tabs[0].url);
+      }
+    );
   });
 });
 
