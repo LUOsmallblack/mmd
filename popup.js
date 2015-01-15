@@ -1,5 +1,7 @@
 console.log(location.href);
 console.log($.fn.jquery);
-function getCurrentUrl(){
-  console.log(location.href);
-}
+$(function(){
+  $("#buttonUrl").click(function(){
+    console.log(location.href);
+  });
+});
