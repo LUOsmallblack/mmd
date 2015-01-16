@@ -1,11 +1,24 @@
-console.log(location.href);
-console.log($.fn.jquery);
+console.log(location.href+" loaded");
+console.log("with jQuery-"+$.fn.jquery);
 $(function(){
   $("#buttonUrl").click(function(){
     chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT},
       function(tabs) {
-        console.log(tabs[0].url);
-        $("#textUrl").text(tabs[0].url);
+        var url=tabs[0].url;
+        var tabid=tabs[0].id;
+        var urlarr=url.split("/");
+        $("#textUrl").text(url);
+        console.log("tabid:"+tabid+"->"+urlarr[2]);
+        if(urlarr[2]=="5sing.kugou.com") {
+          $("#textMp3").text("Working...");
+          chrome.tabs.sendMessage(tabid, {action: "getResource"}, function(resp) {
+            console.log(chrome.runtime.lastError);
+            console.log("url:"+resp.mp3);
+            $("#textMp3").text(resp.mp3);
+          });
+        } else {
+          $("#textMp3").text("Not found");
+        }
       }
     );
   });
