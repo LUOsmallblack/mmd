@@ -17,6 +17,7 @@
   ],
   "permissions": [
     "tabs",
+    "webRequest",
     "http://5sing.kugou.com/*"
   ],
   "content_security_policy": "script-src 'self' https://code.jquery.com; object-src 'self'"
