@@ -20,6 +20,11 @@ $(function(){
       } else {
         $("#textMp3").text("Not found");
       }
+      table = document.getElementById("mediaUrls");
+      for(var i=0;i<BG.medialist[tabid].length;i++){
+        row=table.insertRow(table.rows.length);
+        row.insertCell(row.cells.length).innerHTML=BG.medialist[tabid][i];
+      }
     }
   );
 });
