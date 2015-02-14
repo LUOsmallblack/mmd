@@ -8,8 +8,7 @@ $(function(){
       var tabid=tabs[0].id;
       var urlarr=url.split("/");
       console.log("tabid:"+tabid+"->"+urlarr[2]);
-      $("#textUrl").text(url);
-      console.log(BG.medialist);
+      $("#textUrl").replaceWith($("<a>", {text: tabs[0].title, href: url}));
       if(urlarr[2]=="5sing.kugou.com") {
         $("#textMp3").text("Working...");
         chrome.tabs.sendMessage(tabid, {action: "getResource"}, function(resp) {
@@ -20,9 +19,10 @@ $(function(){
       } else {
         $("#textMp3").text("Not found");
       }
-      table = $("#mediaUrls");
-      for (var i=0; i<BG.medialist[tabid].length; i++) {
-        var row = $("<li id=url_"+i+"></li>").append($("<a>", {text: BG.medialist[tabid][i][0], href: BG.medialist[tabid][i][1]}));
+      var table = $("#mediaUrls");
+      var medialist = BG.medialist[tabid]
+      for (var i=0; i<medialist.length; i++) {
+        var row = $("<li id=url_"+i+"></li>").append($("<a>", {text: medialist[i][0], href: medialist[i][1]}));
         table.append(row);
       }
       $('a').click(function(){
