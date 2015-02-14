@@ -9,6 +9,9 @@
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
+  "background": {
+    "scripts": ["background.js"]
+  },
   "content_scripts": [
     {
       "matches": ["http://5sing.kugou.com/*"],
@@ -18,7 +21,7 @@
   "permissions": [
     "tabs",
     "webRequest",
-    "http://5sing.kugou.com/*"
+    "<all_urls>"
   ],
   "content_security_policy": "script-src 'self' https://code.jquery.com; object-src 'self'"
 }
