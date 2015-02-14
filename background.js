@@ -7,7 +7,7 @@ function getHeaderValue(name, data){
   for (var i = 0; i<data.responseHeaders.length; i++) {
     if (data.responseHeaders[i].name.toLowerCase() == name) {
       if (data.responseHeaders[i].value)
-        return data.responseHeaders[i].value;
+        return decodeURI(data.responseHeaders[i].value);
       if (data.responseHeaders[i].binaryValue) {
         console.log(cptable.utils.decode(936, data.responseHeaders[i].binaryValue));
         return cptable.utils.decode(936, data.responseHeaders[i].binaryValue);

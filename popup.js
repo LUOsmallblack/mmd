@@ -7,8 +7,8 @@ $(function(){
       var url=tabs[0].url;
       var tabid=tabs[0].id;
       var urlarr=url.split("/");
-      $("#textUrl").text(url);
       console.log("tabid:"+tabid+"->"+urlarr[2]);
+      $("#textUrl").text(url);
       console.log(BG.medialist);
       if(urlarr[2]=="5sing.kugou.com") {
         $("#textMp3").text("Working...");
@@ -20,11 +20,15 @@ $(function(){
       } else {
         $("#textMp3").text("Not found");
       }
-      table = document.getElementById("mediaUrls");
-      for(var i=0;i<BG.medialist[tabid].length;i++){
-        row=table.insertRow(table.rows.length);
-        row.insertCell(row.cells.length).innerHTML=BG.medialist[tabid][i];
+      table = $("#mediaUrls");
+      for (var i=0; i<BG.medialist[tabid].length; i++) {
+        var row = $("<li id=url_"+i+"></li>").append($("<a>", {text: BG.medialist[tabid][i][0], href: BG.medialist[tabid][i][1]}));
+        table.append(row);
       }
+      $('a').click(function(){
+        chrome.tabs.create({url: $(this).attr('href')});
+        return false;
+      });
     }
   );
 });
