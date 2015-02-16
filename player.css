@@ -58,13 +58,12 @@ body {
 
 .progress .progress-current {
   background: blue;
-  width: 30%;
 }
 
 .progress .progress-handle {
-  background: url("circle.png") no-repeat -22px -15px;
-  background-size: 72px 48px;
-  margin: -6px 0 0 -10px;
+  background: -webkit-radial-gradient(45px 45px, circle cover, yellow, orange);
+  border-radius:10px;
+  margin: -5px 0 0 -10px;
   height: 20px;
   width: 20px;
   position: absolute;
