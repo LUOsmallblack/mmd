@@ -1,3 +1,7 @@
+body {
+  font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+}
+
 .ctrl-panel {
   top: 0;
   left: 0;
@@ -8,6 +12,7 @@
 .ctrl-panel .cover {
   height: 140px;
   width: 140px;
+  float: left;
 }
 
 .ctrl-panel .cover img {
@@ -16,9 +21,51 @@
 }
 
 .ctrl-panel .info {
+  padding: 0 10px 0 150px;
+  height: 100%;
+}
+
+.ctrl-panel .info .title,.artist,.album {
+  padding: 5px 10px 5px 10px;
+  height: 15px;
+  font-size: 15px;
+}
+
+.ctrl-panel .info .title {
+  height: 20px;
+  font-size: 20px;
+}
+
+.progress {
+  margin: 15px 300px 0 0;
+  position: relative;
+  background: lightgrey;
+  height: 10px;
+}
+
+.progress .progress-buffer,.progress-current {
   top: 0;
   left: 0;
   position: absolute;
-  padding: 0 10px 0 160px;
-  height: 100;
+  height: 6px;
+  margin: 2px;
+  width: 100%;
+}
+
+.progress .progress-buffer {
+  background: grey;
+}
+
+.progress .progress-current {
+  background: blue;
+  width: 30%;
+}
+
+.progress .progress-handle {
+  background: url("circle.png") no-repeat -22px -15px;
+  background-size: 72px 48px;
+  margin: -6px 0 0 -10px;
+  height: 20px;
+  width: 20px;
+  position: absolute;
 }

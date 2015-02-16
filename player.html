@@ -14,6 +14,11 @@
       <div class="title">{{ current.title }}</div>
       <div class="artist">{{ current.artist }}</div>
       <div class="album">{{ current.album }}</div>
+      <div class="progress">
+        <div class="progress-buffer" ng-style="current.bufferstyle"></div>
+        <div class="progress-current" ng-style="current.currentstyle"></div>
+        <a class="progress-handle" ng-style="current.handlestyle"></a>
+      </div>
     </div>
   </div>
 </body>
