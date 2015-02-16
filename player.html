@@ -15,14 +15,24 @@
       <div class="artist">{{ current.artist }}</div>
       <div class="album">{{ current.album }}</div>
       <div class="progress">
-        <div class="progress-buffer" ng-style="current.bufferstyle"></div>
-        <div class="progress-current" ng-style="current.currentstyle"></div>
-        <a class="progress-handle" ng-style="current.handlestyle"></a>
+        <span class="progress-time">{{ current.time }}/{{ current.duration }}</span>
+        <div class="progress-bar">
+          <div class="progress-buffer" ng-style="current.bufferstyle"></div>
+          <div class="progress-current" ng-style="current.currentstyle"></div>
+          <a class="progress-handle" ng-style="current.handlestyle"></a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="music-list">
-    <div ng-repeat="author in musiclist">{{ musiclist.name }}</div>
+  <div class="list-panel">
+    <div class="musiclist">
+      <div ng-repeat="music in musiclist" ng-class-odd="'musiclist-odd'" ng-class-even="'musiclist-even'">
+        <span class="musiclist-id">{{ music.id }}</span>
+        <span class="musiclist-title">{{ music.title }}</span>
+        <span class="musiclist-author">{{ music.author }}</span>
+        <span class="musiclist-album">{{ music.album }}</span>
+      </div>
+    </div>
   </div>
 </body>
 </html>
