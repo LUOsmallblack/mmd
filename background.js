@@ -35,6 +35,8 @@ chrome.webRequest.onResponseStarted.addListener(
       var regres = regname.exec(name);
       if (regres) {
         name = regres[1];
+      } else {
+        name = "";
       }
       if (/^(['"]).*\1$/.test(name)) {
         name = name.slice(1,-1);
