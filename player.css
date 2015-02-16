@@ -1,0 +1,24 @@
+.ctrl-panel {
+  top: 0;
+  left: 0;
+  position: relative;
+  height: 140px;
+}
+
+.ctrl-panel .cover {
+  height: 140px;
+  width: 140px;
+}
+
+.ctrl-panel .cover img {
+  height: 100%;
+  width: 100%;
+}
+
+.ctrl-panel .info {
+  top: 0;
+  left: 0;
+  position: absolute;
+  padding: 0 10px 0 160px;
+  height: 100;
+}
