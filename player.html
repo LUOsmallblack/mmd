@@ -5,12 +5,12 @@
   <script src="angular.js"></script>
   <script src="player.js"></script>
 </head>
-<body ng-app="ngAppPlayer" ng-csp class="ng-scope">
+<body ng-app="ngAppPlayer" data-ng-controller="MusicListController" ng-csp class="ng-scope">
   <div class="ctrl-panel">
     <div class="cover">
       <img src="icon.png">
     </div>
-    <div class="info" data-ng-controller="MusicListController" class="ng-scope">
+    <div class="info" class="ng-scope">
       <div class="title">{{ current.title }}</div>
       <div class="artist">{{ current.artist }}</div>
       <div class="album">{{ current.album }}</div>
@@ -20,6 +20,9 @@
         <a class="progress-handle" ng-style="current.handlestyle"></a>
       </div>
     </div>
+  </div>
+  <div class="music-list">
+    <div ng-repeat="author in musiclist">{{ musiclist.name }}</div>
   </div>
 </body>
 </html>
