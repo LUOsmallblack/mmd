@@ -24,8 +24,8 @@
       </div>
     </div>
     <div ng-init="current.playing=false">
-      <button class="btn-play" ng-click="audio.play()" ng-if="!current.playing">PLAY</button>
-      <button class="btn-pause" ng-click="audio.pause()" ng-if="current.playing">PAUSE</button>
+      <button class="btn-play" ng-click="ctrl.play()" ng-if="!current.playing">PLAY</button>
+      <button class="btn-pause" ng-click="ctrl.pause()" ng-if="current.playing">PAUSE</button>
     </div>
   </div>
   <div class="list-panel">

@@ -26,26 +26,11 @@ angular.module("ngAppPlayer", [])
     title: "Title",
     artist: "Artist",
     album: "Album",
-    rawtime: 63.4,
-    rawduration: 251,
+    rawtime: 0,
+    rawduration: 0,
+    rawbuffer: 0,
     bufferstyle: {'width':'100%'},
   };
-
-  $scope.$watch('current.rawtime', function(){
-    $scope.current.time = $scope.current.rawtime.toMMSS();
-    var per = ($scope.current.rawtime / $scope.current.rawduration).toBe01().toPercent();
-    $scope.current.currentstyle = {'width': per};
-    $scope.current.handlestyle = {'left': per};
-  });
-  $scope.$watch('current.rawduration', function(){
-    if ($scope.current.rawduration == 0) {
-      $scope.current.rawduration = -1;
-    }
-    $scope.current.duration = $scope.current.rawduration.toMMSS();
-    var per = ($scope.current.rawtime / $scope.current.rawduration).toBe01().toPercent();
-    $scope.current.currentstyle = {'width': per};
-    $scope.current.handlestyle = {'left': per};
-  });
 
   $scope.musiclist = [
     {id: 0, title: "Love&Loyalty", author: "Juji Gu", album: "", duration: "3:45"},
@@ -56,8 +41,52 @@ angular.module("ngAppPlayer", [])
   $scope.audio = new Audio();
   $scope.audio.src = "http://yinyueshiting.baidu.com/data2/music/124535166/2456900158400128.mp3?xcode=4ce61f5789ca300eae5e10908488460f64e8544c01ac648a";
   console.log($scope.audio);
+  $scope.ctrl = {
+    play: function() { $scope.audio.play(); },
+    pause: function() { $scope.audio.pause(); },
+  }
 
+  //$scope.$watch('audio.currentTime', function(val) {$scope.current.rawtime = val;})
+  //$scope.$watch('audio.duration', function(val) {$scope.current.rawduration = val;})
+  $scope.audio.addEventListener("timeupdate", function() {
+    $scope.current.rawtime = this.currentTime;
+    $scope.current.rawduration = this.duration;
+    for (var i = this.buffered.length - 1; i >= 0; i--) {
+      if(this.buffered.start(i) <= this.currentTime && this.buffered.end(i) >= this.currentTime) {
+        $scope.current.rawbuffer = this.buffered.end(i);
+        break;
+      }
+    };
+    $scope.$apply();
+  })
+  $scope.audio.addEventListener("play", function() {
+    $scope.current.playing = true
+    $scope.$apply();
+  })
+  $scope.audio.addEventListener("pause", function() {
+    $scope.current.playing = false
+    $scope.$apply();
+  })
+  $scope.audio.addEventListener("ended", function() {
+    $scope.current.playing = false
+    $scope.$apply();
+  })
+  $scope.$watch('current.rawtime', function(){
+    $scope.current.time = $scope.current.rawtime.toMMSS();
+    var per = ($scope.current.rawtime / ($scope.current.rawduration||1)).toBe01().toPercent();
+    $scope.current.currentstyle = {'width': per};
+    $scope.current.handlestyle = {'left': per};
+  });
+  $scope.$watch('current.rawbuffer', function(){
+    var per = ($scope.current.rawbuffer / ($scope.current.rawduration||1)).toBe01().toPercent();
+    $scope.current.bufferstyle = {'width': per};
+  });
+  $scope.$watch('current.rawduration', function(){
+    $scope.current.duration = $scope.current.rawduration.toMMSS();
+    var per = ($scope.current.rawtime / ($scope.current.rawduration||1)).toBe01().toPercent();
+    $scope.current.currentstyle = {'width': per};
+    $scope.current.handlestyle = {'left': per};
+    var per1 = ($scope.current.rawbuffer / ($scope.current.rawduration||1)).toBe01().toPercent();
+    $scope.current.bufferstyle = {'width': per1};
+  });
 }]);
-
-
-
