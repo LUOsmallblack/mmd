@@ -77,7 +77,8 @@ angular.module("ngAppPlayer", [])
     $scope.current.time = $scope.current.rawtime.toMMSS();
     var per = ($scope.current.rawtime / ($scope.current.rawduration||1)).toBe01().toPercent();
     $scope.current.currentstyle = {'width': per};
-    $scope.current.handlestyle = {'left': per};
+    if (!$(".progress-handle").hasClass("ui-draggable-dragging"))
+      $scope.current.handlestyle = {'left': per};
   });
   $scope.$watch('current.rawbuffer', function(){
     var per = ($scope.current.rawbuffer / ($scope.current.rawduration||1)).toBe01().toPercent();
@@ -87,8 +88,23 @@ angular.module("ngAppPlayer", [])
     $scope.current.duration = $scope.current.rawduration.toMMSS();
     var per = ($scope.current.rawtime / ($scope.current.rawduration||1)).toBe01().toPercent();
     $scope.current.currentstyle = {'width': per};
-    $scope.current.handlestyle = {'left': per};
+    if (!$(".progress-handle").hasClass("ui-draggable-dragging"))
+      $scope.current.handlestyle = {'left': per};
     var per1 = ($scope.current.rawbuffer / ($scope.current.rawduration||1)).toBe01().toPercent();
     $scope.current.bufferstyle = {'width': per1};
+  });
+  $(document).ready(function() {
+    console.log($(".progress-handle"));
+    $(".progress-handle").draggable({
+      cursor: 'pointer',
+      opacity: 0.85,
+      containment: 'parent',
+      axis: 'x',
+      stop: function(event, ui) {
+        console.log($scope.current.rawduration * ui.position.left / $(this).parent().width());
+        $scope.audio.currentTime = $scope.current.rawduration * ui.position.left / $(this).parent().width();
+        $scope.$apply();
+      },
+    });
   });
 }]);

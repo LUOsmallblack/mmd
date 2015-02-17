@@ -84,9 +84,10 @@ body {
 .progress-handle {
   background: -webkit-radial-gradient(45px 45px, circle cover, yellow, orange);
   border-radius:10px;
-  margin: -5px 0 0 -10px;
+  margin: -5px -10px 0 -10px;
   height: 20px;
   width: 20px;
+  z-index: 10050;
   position: absolute;
 }
 
