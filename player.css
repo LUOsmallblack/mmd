@@ -73,7 +73,8 @@ body {
   width: 100%;
 }
 
-.progress-buffer {
+.progress-bar .progress-buffer-sp {
+  margin: 0;
   background: gray;
 }
 

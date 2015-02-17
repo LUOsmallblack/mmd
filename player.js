@@ -28,7 +28,7 @@ angular.module("ngAppPlayer", [])
     album: "Album",
     rawtime: 0,
     rawduration: 0,
-    rawbuffer: 0,
+    rawbuffer: [],
     bufferstyle: {'width':'100%'},
   };
 
@@ -38,6 +38,15 @@ angular.module("ngAppPlayer", [])
     {id: 2, title: "Dragon Knight", author: "Jay Chou", album: "", duration: "5:07"},
   ];
 
+  var timeToPercent = function(time) {
+    return (time / ($scope.current.rawduration||1)).toBe01().toPercent();
+  }
+  $scope.buffersp_style = function(buffer) {
+    return {
+      'left': timeToPercent(buffer.start),
+      'width': timeToPercent(buffer.end-buffer.start),
+    };
+  };
   $scope.audio = new Audio();
   $scope.audio.src = "http://yinyueshiting.baidu.com/data2/music/124535166/2456900158400128.mp3?xcode=4ce61f5789ca300eae5e10908488460f64e8544c01ac648a";
   console.log($scope.audio);
@@ -46,51 +55,55 @@ angular.module("ngAppPlayer", [])
     pause: function() { $scope.audio.pause(); },
   }
 
-  $scope.audio.addEventListener("loadstart", function(){
-    $scope.current.uri = this.currentSrc;
-    $scope.$apply();
-  })
-  $scope.audio.addEventListener("timeupdate", function() {
-    $scope.current.rawtime = this.currentTime;
-    $scope.current.rawduration = this.duration;
-    for (var i = this.buffered.length - 1; i >= 0; i--) {
-      if(this.buffered.start(i) <= this.currentTime && this.buffered.end(i) >= this.currentTime) {
-        $scope.current.rawbuffer = this.buffered.end(i);
-        break;
-      }
-    };
-    $scope.$apply();
-  })
-  $scope.audio.addEventListener("play", function() {
-    $scope.current.playing = true
-    $scope.$apply();
-  })
-  $scope.audio.addEventListener("pause", function() {
-    $scope.current.playing = false
-    $scope.$apply();
-  })
-  $scope.audio.addEventListener("ended", function() {
-    $scope.current.playing = false
-    $scope.$apply();
-  })
+  $($scope.audio).bind({
+    "loadstart": function() {
+      $scope.current.uri = this.currentSrc;
+      $scope.$apply();
+    },
+    "loadedmetadata": function() {
+      $scope.current.rawduration = this.duration;
+      $scope.$apply();
+    },
+    "timeupdate": function() {
+      $scope.current.rawtime = this.currentTime;
+      $scope.current.rawduration = this.duration;
+      $scope.$apply();
+    },
+    "play": function() {
+      $scope.current.playing = true;
+      $scope.$apply();
+    },
+    "pause ended": function() {
+      $scope.current.playing = false
+      $scope.$apply();
+    },
+    "progress": function() {
+      var buffered = [];
+      for (var i = this.seekable.length - 1; i >= 0; i--) {
+        buffered.push({start: this.buffered.start(i), end: this.buffered.end(i)});
+      };
+      $scope.current.rawbuffer = buffered;
+      $scope.$apply();
+    }
+  });
   $scope.$watch('current.rawtime', function(){
     $scope.current.time = $scope.current.rawtime.toMMSS();
-    var per = ($scope.current.rawtime / ($scope.current.rawduration||1)).toBe01().toPercent();
+    var per = timeToPercent($scope.current.rawtime);
     $scope.current.currentstyle = {'width': per};
     if (!$(".progress-handle").hasClass("ui-draggable-dragging"))
       $scope.current.handlestyle = {'left': per};
   });
   $scope.$watch('current.rawbuffer', function(){
-    var per = ($scope.current.rawbuffer / ($scope.current.rawduration||1)).toBe01().toPercent();
+    var per = timeToPercent(($scope.current.rawbuffer[0]||{end:0}).end);
     $scope.current.bufferstyle = {'width': per};
   });
   $scope.$watch('current.rawduration', function(){
     $scope.current.duration = $scope.current.rawduration.toMMSS();
-    var per = ($scope.current.rawtime / ($scope.current.rawduration||1)).toBe01().toPercent();
+    var per = timeToPercent($scope.current.rawtime);
     $scope.current.currentstyle = {'width': per};
     if (!$(".progress-handle").hasClass("ui-draggable-dragging"))
       $scope.current.handlestyle = {'left': per};
-    var per1 = ($scope.current.rawbuffer / ($scope.current.rawduration||1)).toBe01().toPercent();
+    var per1 = timeToPercent(($scope.current.rawbuffer[0]||{end:0}).end);
     $scope.current.bufferstyle = {'width': per1};
   });
   $(document).ready(function() {

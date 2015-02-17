@@ -19,7 +19,9 @@
       <div class="progress">
         <span class="progress-time">{{ current.time }}/{{ current.duration }}</span>
         <div class="progress-bar">
-          <div class="progress-buffer" ng-style="current.bufferstyle"></div>
+          <div class="progress-buffer" ng-style="current.bufferstyle">
+            <div class="progress-buffer-sp" ng-repeat="buffer in current.rawbuffer" ng-style="buffersp_style(buffer)"></div>
+          </div>
           <div class="progress-current" ng-style="current.currentstyle"></div>
           <a class="progress-handle" ng-style="current.handlestyle"></a>
         </div>
