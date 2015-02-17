@@ -101,12 +101,11 @@ body {
   font-size: 14px;
   overflow-x: auto;
   overflow-y: hidden; 
-  background: ivory;
+  background: blue;
 }
 
-.musiclist div {
-  border-top: 2px solid white;
-  border-bottom: 2px solid white;
+.musiclist-item {
+  margin: 2px 0;
   display: inline-block;
   min-width: 100%;
   white-space: nowrap;
@@ -133,7 +132,7 @@ body {
   text-align: right;
 }
 
-.musiclist .musiclist-title {
+.musiclist-title {
   width: 200px;
 }
 
