@@ -46,8 +46,10 @@ angular.module("ngAppPlayer", [])
     pause: function() { $scope.audio.pause(); },
   }
 
-  //$scope.$watch('audio.currentTime', function(val) {$scope.current.rawtime = val;})
-  //$scope.$watch('audio.duration', function(val) {$scope.current.rawduration = val;})
+  $scope.audio.addEventListener("loadstart", function(){
+    $scope.current.uri = this.currentSrc;
+    $scope.$apply();
+  })
   $scope.audio.addEventListener("timeupdate", function() {
     $scope.current.rawtime = this.currentTime;
     $scope.current.rawduration = this.duration;

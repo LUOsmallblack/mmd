@@ -7,13 +7,13 @@
 </head>
 <body ng-app="ngAppPlayer" data-ng-controller="MusicListController" ng-csp class="ng-scope">
   <div class="ctrl-panel">
-    <span class="cover">
+    <span class="musicinfo-cover">
       <img src="icon.png">
     </span>
-    <div class="info" class="ng-scope">
-      <div class="title">{{ current.title }}</div>
-      <div class="artist">{{ current.artist }}</div>
-      <div class="album">{{ current.album }}</div>
+    <div class="musicinfo" class="ng-scope">
+      <div class="musicinfo-title">{{ current.title }}</div>
+      <div class="musicinfo-artist">{{ current.artist }} - {{ current.album }}</div>
+      <input class="musicinfo-uri" ng-model="current.uri">
       <div class="progress">
         <span class="progress-time">{{ current.time }}/{{ current.duration }}</span>
         <div class="progress-bar">
@@ -23,9 +23,13 @@
         </div>
       </div>
     </div>
-    <div ng-init="current.playing=false">
-      <button class="btn-play" ng-click="ctrl.play()" ng-if="!current.playing">PLAY</button>
-      <button class="btn-pause" ng-click="ctrl.pause()" ng-if="current.playing">PAUSE</button>
+    <div class="control">
+      <div class="control-center" ng-init="current.playing=false">
+        <button class="btnctrl-prev" ng-click="ctrl.prev()">&#x25af;&#x25c1;</button>
+        <button class="btnctrl-play" ng-click="ctrl.play()" ng-if="!current.playing">&#x25b6;</button>
+        <button class="btnctrl-pause" ng-click="ctrl.pause()" ng-if="current.playing">&#x25ae; &#x25ae;</button>
+        <button class="btnctrl-next" ng-click="ctrl.next()">&#x25b7;&#x25af;</button>
+      </div>
     </div>
   </div>
   <div class="list-panel">
