@@ -99,22 +99,24 @@ body {
   margin: 10px 300px 0 150px;
   padding: 5px;
   font-size: 14px;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden; 
   background: ivory;
 }
 
 .musiclist div {
-  height: 16px;
-  width: 900px;
-  margin: 2px;
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+  display: inline-block;
+  min-width: 100%;
+  white-space: nowrap;
   overflow: hidden;
 }
 
 .musiclist span {
-  float: left;
   height: 16px;
   padding: 0px 5px;
+  display: inline-block;
   border-right: 1px dotted gray;
 }
 
