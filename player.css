@@ -52,7 +52,7 @@ body {
 }
 
 .progress {
-  margin: 10px 290px 0 0;
+  margin: 10px 290px 0 5px;
   height: 10px;
   position: relative;
 }
