@@ -7,9 +7,9 @@
 </head>
 <body ng-app="ngAppPlayer" data-ng-controller="MusicListController" ng-csp class="ng-scope">
   <div class="ctrl-panel">
-    <div class="cover">
+    <span class="cover">
       <img src="icon.png">
-    </div>
+    </span>
     <div class="info" class="ng-scope">
       <div class="title">{{ current.title }}</div>
       <div class="artist">{{ current.artist }}</div>
@@ -27,7 +27,7 @@
   <div class="list-panel">
     <div class="musiclist">
       <div ng-repeat="music in musiclist" ng-class-odd="'musiclist-odd'" ng-class-even="'musiclist-even'">
-        <span class="musiclist-id">{{ music.id }}</span>
+        <span class="musiclist-id">{{ $index + 1 }}</span>
         <span class="musiclist-title">{{ music.title }}</span>
         <span class="musiclist-author">{{ music.author }}</span>
         <span class="musiclist-album">{{ music.album }}</span>

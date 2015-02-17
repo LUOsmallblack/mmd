@@ -5,11 +5,16 @@ body {
 .ctrl-panel {
   top: 0;
   left: 0;
-  position: relative;
-  height: 140px;
+  position: fixed;
+  width: 100%;
+  height: 160px;
+  z-index: 10000;
+  background: aqua;
+  border-bottom: 10px solid white;
 }
 
 .ctrl-panel .cover {
+  margin: 10px;
   height: 140px;
   width: 140px;
   float: left;
@@ -21,7 +26,7 @@ body {
 }
 
 .ctrl-panel .info {
-  margin: 0 10px 0 150px;
+  margin: 10px 10px 0px 160px;
 }
 
 .ctrl-panel .info .title,.artist,.album {
@@ -84,16 +89,26 @@ body {
   font-size: 14px;
 }
 
+.list-panel {
+  top: 160px;
+  width: 100%;
+  position: absolute;
+}
+
 .musiclist {
   margin: 10px 300px 0 150px;
   padding: 5px;
   font-size: 14px;
+  overflow-x: scroll;
+  overflow-y: hidden; 
   background: ivory;
 }
 
 .musiclist div {
   height: 16px;
+  width: 900px;
   margin: 2px;
+  overflow: hidden;
 }
 
 .musiclist span {
@@ -116,7 +131,7 @@ body {
   text-align: right;
 }
 
-.musiclist-title {
+.musiclist .musiclist-title {
   width: 200px;
 }
 
