@@ -52,4 +52,12 @@ angular.module("ngAppPlayer", [])
     {id: 1, title: "If I were a Boy", author: "Beyonce", album: "", duration: "4:12"},
     {id: 2, title: "Dragon Knight", author: "Jay Chou", album: "", duration: "5:07"},
   ];
+
+  $scope.audio = new Audio();
+  $scope.audio.src = "http://yinyueshiting.baidu.com/data2/music/124535166/2456900158400128.mp3?xcode=4ce61f5789ca300eae5e10908488460f64e8544c01ac648a";
+  console.log($scope.audio);
+
 }]);
+
+
+
