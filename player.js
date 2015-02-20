@@ -21,6 +21,19 @@ Number.prototype.toPercent = function() {
 }
 
 angular.module("ngAppPlayer", [])
+.directive('ngEnter', function() {
+  return function($scope, element, attrs) {
+    element.bind("keydown keypress", function(event) {
+      if(event.which === 13) {
+        $scope.$apply(function(){
+          $scope.$eval(attrs.ngEnter, {'event': event});
+        });
+
+        event.preventDefault();
+      }
+    });
+  };
+})
 .controller("MusicListController", ["$scope", function MusicListController($scope) {
   $scope.current = {
     title: "Title",
@@ -53,6 +66,10 @@ angular.module("ngAppPlayer", [])
   $scope.ctrl = {
     play: function() { $scope.audio.play(); },
     pause: function() { $scope.audio.pause(); },
+    set: function() {
+      $scope.audio.src = $scope.current.showuri;
+      $(".musicinfo-uri>input").blur();
+    },
   }
 
   $($scope.audio).bind({
@@ -106,8 +123,10 @@ angular.module("ngAppPlayer", [])
     var per1 = timeToPercent(($scope.current.rawbuffer[0]||{end:0}).end);
     $scope.current.bufferstyle = {'width': per1};
   });
+  $scope.$watch('current.uri', function(){
+    $scope.current.showuri = $scope.current.uri;
+  })
   $(document).ready(function() {
-    console.log($(".progress-handle"));
     $(".progress-handle").draggable({
       cursor: 'pointer',
       opacity: 0.85,

@@ -51,6 +51,17 @@ body {
   position: relative;
 }
 
+.musicinfo-uri > a {
+  margin: 4px 2px;
+  position: absolute;
+}
+
+.musicinfo-uri > input {
+  top: 0;
+  left: 0;
+  position: relative;
+}
+
 .progress {
   margin: 10px 290px 0 5px;
   height: 10px;

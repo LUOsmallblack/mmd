@@ -15,7 +15,11 @@
     <div class="musicinfo" class="ng-scope">
       <div class="musicinfo-title">{{ current.title }}</div>
       <div class="musicinfo-artist">{{ current.artist }} - {{ current.album }}</div>
-      <input class="musicinfo-uri" ng-model="current.uri">
+      <div class="musicinfo-uri" ng-init="current.showinput = false">
+        <a ng-href="{{ current.uri }}" ng-click="current.showinput = true" ng-show="!current.showinput" onclick="return false;">{{ current.uri }}</a>
+        <!-- http://cdn.y.baidu.com/yinyueren/30d43f135e7e041b190a761d19a104fc.mp3?xcode=6c03e118aaf9408f331b2f0f8247f9da51f715e84709ddb5 -->
+        <input ng-model="current.showuri" ng-blur="current.showinput = false" ng-show="current.showinput" ng-enter="ctrl.set()">
+      </div>
       <div class="progress">
         <span class="progress-time">{{ current.time }}/{{ current.duration }}</span>
         <div class="progress-bar">
