@@ -72,6 +72,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     time: 0,
     duration: 0,
     buffered: [],
+    volume: 1,
   };
 
   $scope.musiclist = [
@@ -90,13 +91,21 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
         'width': $scope.utils.timeToPercent(buffer.end-buffer.start),
       }
     },
+    getVClickValue: function(event) {
+      // use magic!
+      return (event.target.offsetHeight - event.offsetY) / event.currentTarget.offsetHeight;
+    },
+    getClickValue: function(event) {
+      return event.offsetX / event.currentTarget.offsetWidth;
+    }
   };
   $scope.audio = new Audio();
-  $scope.audio.src = "http://yinyueshiting.baidu.com/data2/music/124535166/2456900158400128.mp3?xcode=4ce61f5789ca300eae5e10908488460f64e8544c01ac648a";
+  $scope.audio.src = "http://cdn.y.baidu.com/yinyueren/30d43f135e7e041b190a761d19a104fc.mp3?xcode=6c03e118aaf9408f331b2f0f8247f9da51f715e84709ddb5";
   $scope.ctrl = {
     play: function() { $scope.audio.play(); },
     pause: function() { $scope.audio.pause(); },
     set: function(uri) { $scope.audio.src = uri; },
+    setvolume: function(vol) { $scope.audio.volume = vol; },
   }
 
   $($scope.audio).bind({
@@ -128,10 +137,29 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
       };
       $scope.current.buffered = buffered;
       $scope.$apply();
-    }
+    },
+    "volumechange": function() {
+      $scope.current.volume = this.volume;
+      $scope.$apply();
+    },
   });
   $scope.$watch('current.uri', function(){
     $scope.current.showuri = $scope.current.uri;
+  })
+  $scope.$watch('current.time', function() {
+    $scope.audio.currentTime = $scope.current.time;
+  })
+  $scope.$watch('current.playing', function(newval, oldval){
+    if (newval == oldval) {
+      return console.log("playing same");
+    }
+    if (newval)
+      $scope.audio.play();
+    else
+      $scope.audio.pause();
+  })
+  $scope.$watch('current.volume', function(){
+    $scope.audio.volume = $scope.current.volume;
   })
   $(document).ready(function() {
     $(".progress-handle").draggable({

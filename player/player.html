@@ -26,29 +26,29 @@
         </div>
         <div class="musicinfo-time">
           <span class="progress-time">{{ current.time.toMMSS() }}/{{ current.duration.toMMSS() }}</span>
-          <div class="progress-xbar">
+          <div class="progress-xbar" ng-click="current.time = current.duration * utils.getClickValue($event)">
             <div class="progress-buffer">
               <div class="progress-buffer-sp" ng-repeat="buffer in current.buffered" ng-style="utils.bufferspStyle(buffer)"></div>
             </div>
-            <div class="progress-current" ng-style="{'width': utils.timeToPercent(current.time)}"></div>
-            <a class="progress-handle" ng-style="!current.dragging && {'left': utils.timeToPercent(current.time)}"></a>
+            <div class="progress-current" ng-style="{ 'width': utils.timeToPercent(current.time) }"></div>
+            <a class="progress-handle" ng-style="!current.dragging && { 'left': utils.timeToPercent(current.time) }"></a>
           </div>
         </div>
       </div>
       <div class="ctrlbox col-md-3">
         <div class="volume-ctrl">
-          <div class="volume-bar">
-            <div class="volume-current"></div>
+          <div class="volume-bar" ng-click="current.volume = utils.getVClickValue($event)">
+            <div class="volume-current" ng-style="{ 'height': current.volume.toPercent()+'%' }"></div>
           </div>
           <button class="volume-mute">+</button>
         </div>
       </div>
     </div>
     <div class="control">
-      <div class="control-center" ng-init="current.playing=false">
+      <div class="control-center" ng-init="current.playing = false">
         <button class="btnctrl-prev" ng-click="ctrl.prev()">&#x25af;&#x25c1;</button>
-        <button class="btnctrl-play" ng-click="ctrl.play()" ng-if="!current.playing">&#x25b6;</button>
-        <button class="btnctrl-pause" ng-click="ctrl.pause()" ng-if="current.playing">&#x25ae; &#x25ae;</button>
+        <button class="btnctrl-play" ng-click="current.playing = true" ng-if="!current.playing">&#x25b6;</button>
+        <button class="btnctrl-pause" ng-click="current.playing = false" ng-if="current.playing">&#x25ae; &#x25ae;</button>
         <button class="btnctrl-next" ng-click="ctrl.next()">&#x25b7;&#x25af;</button>
       </div>
     </div>

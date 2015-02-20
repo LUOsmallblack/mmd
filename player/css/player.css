@@ -116,6 +116,7 @@ body {
 
 .volume-ctrl {
   position: relative;
+  z-index: 10050;
 }
 
 .volume-bar {
