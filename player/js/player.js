@@ -76,7 +76,6 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
   };
   $scope.audio = new Audio();
   $scope.audio.src = "http://yinyueshiting.baidu.com/data2/music/124535166/2456900158400128.mp3?xcode=4ce61f5789ca300eae5e10908488460f64e8544c01ac648a";
-  console.log($scope.audio);
   $scope.ctrl = {
     play: function() { $scope.audio.play(); },
     pause: function() { $scope.audio.pause(); },
