@@ -69,9 +69,9 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     title: "Title",
     artist: "Artist",
     album: "Album",
-    rawtime: 0,
-    rawduration: 0,
-    rawbuffer: [],
+    time: 0,
+    duration: 0,
+    buffered: [],
   };
 
   $scope.musiclist = [
@@ -80,23 +80,23 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     {id: 2, title: "Dragon Knight", author: "Jay Chou", album: "", duration: "5:07"},
   ];
 
-  var timeToPercent = function(time) {
-    return (time / ($scope.current.rawduration||1)).toBe01().toPercent();
-  }
-  $scope.buffersp_style = function(buffer) {
-    return {
-      'left': timeToPercent(buffer.start),
-      'width': timeToPercent(buffer.end-buffer.start),
-    };
+  $scope.utils = {
+    timeToPercent: function(time) {
+      return (time / ($scope.current.duration||1)).toBe01().toPercent();
+    },
+    bufferspStyle: function(buffer) {
+      return {
+        'left': $scope.utils.timeToPercent(buffer.start),
+        'width': $scope.utils.timeToPercent(buffer.end-buffer.start),
+      }
+    },
   };
   $scope.audio = new Audio();
   $scope.audio.src = "http://yinyueshiting.baidu.com/data2/music/124535166/2456900158400128.mp3?xcode=4ce61f5789ca300eae5e10908488460f64e8544c01ac648a";
   $scope.ctrl = {
     play: function() { $scope.audio.play(); },
     pause: function() { $scope.audio.pause(); },
-    set: function(uri) {
-      $scope.audio.src = uri;
-    },
+    set: function(uri) { $scope.audio.src = uri; },
   }
 
   $($scope.audio).bind({
@@ -105,12 +105,12 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
       $scope.$apply();
     },
     "loadedmetadata": function() {
-      $scope.current.rawduration = this.duration;
+      $scope.current.duration = this.duration;
       $scope.$apply();
     },
     "timeupdate": function() {
-      $scope.current.rawtime = this.currentTime;
-      $scope.current.rawduration = this.duration;
+      $scope.current.time = this.currentTime;
+      $scope.current.duration = this.duration;
       $scope.$apply();
     },
     "play": function() {
@@ -126,23 +126,9 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
       for (var i = this.buffered.length - 1; i >= 0; i--) {
         buffered.push({start: this.buffered.start(i), end: this.buffered.end(i)});
       };
-      $scope.current.rawbuffer = buffered;
+      $scope.current.buffered = buffered;
       $scope.$apply();
     }
-  });
-  $scope.$watch('current.rawtime', function(){
-    $scope.current.time = $scope.current.rawtime.toMMSS();
-    var per = timeToPercent($scope.current.rawtime);
-    $scope.current.currentstyle = {'width': per};
-    if (!$(".progress-handle").hasClass("ui-draggable-dragging"))
-      $scope.current.handlestyle = {'left': per};
-  });
-  $scope.$watch('current.rawduration', function(){
-    $scope.current.duration = $scope.current.rawduration.toMMSS();
-    var per = timeToPercent($scope.current.rawtime);
-    $scope.current.currentstyle = {'width': per};
-    if (!$(".progress-handle").hasClass("ui-draggable-dragging"))
-      $scope.current.handlestyle = {'left': per};
   });
   $scope.$watch('current.uri', function(){
     $scope.current.showuri = $scope.current.uri;
@@ -153,8 +139,12 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
       opacity: 0.85,
       containment: 'parent',
       axis: 'x',
+      start: function() {
+        $scope.current.dragging = true;
+      },
       stop: function(event, ui) {
-        $scope.audio.currentTime = $scope.current.rawduration * ui.position.left / $(this).parent().width();
+        $scope.current.dragging = false;
+        $scope.audio.currentTime = $scope.current.duration * ui.position.left / $(this).parent().width();
         $scope.$apply();
       },
     });

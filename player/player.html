@@ -25,13 +25,13 @@
           <input ng-model="current.showuri" ng-blur="current.showinput = false" ng-set-focus="current.showinput" ng-show="current.showinput" ng-enter="ctrl.set(current.showuri);current.showinput = false">
         </div>
         <div class="musicinfo-time">
-          <span class="progress-time">{{ current.time }}/{{ current.duration }}</span>
+          <span class="progress-time">{{ current.time.toMMSS() }}/{{ current.duration.toMMSS() }}</span>
           <div class="progress-xbar">
             <div class="progress-buffer">
-              <div class="progress-buffer-sp" ng-repeat="buffer in current.rawbuffer" ng-style="buffersp_style(buffer)"></div>
+              <div class="progress-buffer-sp" ng-repeat="buffer in current.buffered" ng-style="utils.bufferspStyle(buffer)"></div>
             </div>
-            <div class="progress-current" ng-style="current.currentstyle"></div>
-            <a class="progress-handle" ng-style="current.handlestyle"></a>
+            <div class="progress-current" ng-style="{'width': utils.timeToPercent(current.time)}"></div>
+            <a class="progress-handle" ng-style="!current.dragging && {'left': utils.timeToPercent(current.time)}"></a>
           </div>
         </div>
       </div>
