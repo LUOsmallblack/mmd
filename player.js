@@ -20,21 +20,36 @@ Number.prototype.toPercent = function() {
   return (this*100).toFixed(2) + '%';
 }
 
-angular.module("ngAppPlayer", [])
-.directive('ngEnter', function() {
-  return function($scope, element, attrs) {
+var app = angular.module("ngAppPlayer", []);
+
+app.directive('ngEnter', function() {
+  return function(scope, element, attrs) {
     element.bind("keydown keypress", function(event) {
       if(event.which === 13) {
-        $scope.$apply(function(){
-          $scope.$eval(attrs.ngEnter, {'event': event});
+        scope.$apply(function(){
+          scope.$eval(attrs.ngEnter, {'event': event});
         });
-
         event.preventDefault();
       }
     });
   };
-})
-.controller("MusicListController", ["$scope", function MusicListController($scope) {
+});
+
+app.directive('ngSetFocus',function($timeout) {
+  return {
+    restrict : 'A',
+    link : function(scope,element,attr) {
+      scope.$watch(attr.ngSetFocus,function(val) {
+        $timeout(function() {
+          val ? element.focus() :
+            element.blur();
+        });
+      });
+    }
+  }
+});
+
+app.controller("MusicListController", ["$scope", function MusicListController($scope) {
   $scope.current = {
     title: "Title",
     artist: "Artist",
@@ -42,7 +57,6 @@ angular.module("ngAppPlayer", [])
     rawtime: 0,
     rawduration: 0,
     rawbuffer: [],
-    bufferstyle: {'width':'100%'},
   };
 
   $scope.musiclist = [
@@ -66,9 +80,8 @@ angular.module("ngAppPlayer", [])
   $scope.ctrl = {
     play: function() { $scope.audio.play(); },
     pause: function() { $scope.audio.pause(); },
-    set: function() {
-      $scope.audio.src = $scope.current.showuri;
-      $(".musicinfo-uri>input").blur();
+    set: function(uri) {
+      $scope.audio.src = uri;
     },
   }
 
@@ -96,7 +109,7 @@ angular.module("ngAppPlayer", [])
     },
     "progress": function() {
       var buffered = [];
-      for (var i = this.seekable.length - 1; i >= 0; i--) {
+      for (var i = this.buffered.length - 1; i >= 0; i--) {
         buffered.push({start: this.buffered.start(i), end: this.buffered.end(i)});
       };
       $scope.current.rawbuffer = buffered;
@@ -110,18 +123,12 @@ angular.module("ngAppPlayer", [])
     if (!$(".progress-handle").hasClass("ui-draggable-dragging"))
       $scope.current.handlestyle = {'left': per};
   });
-  $scope.$watch('current.rawbuffer', function(){
-    var per = timeToPercent(($scope.current.rawbuffer[0]||{end:0}).end);
-    $scope.current.bufferstyle = {'width': per};
-  });
   $scope.$watch('current.rawduration', function(){
     $scope.current.duration = $scope.current.rawduration.toMMSS();
     var per = timeToPercent($scope.current.rawtime);
     $scope.current.currentstyle = {'width': per};
     if (!$(".progress-handle").hasClass("ui-draggable-dragging"))
       $scope.current.handlestyle = {'left': per};
-    var per1 = timeToPercent(($scope.current.rawbuffer[0]||{end:0}).end);
-    $scope.current.bufferstyle = {'width': per1};
   });
   $scope.$watch('current.uri', function(){
     $scope.current.showuri = $scope.current.uri;
@@ -133,7 +140,6 @@ angular.module("ngAppPlayer", [])
       containment: 'parent',
       axis: 'x',
       stop: function(event, ui) {
-        console.log($scope.current.rawduration * ui.position.left / $(this).parent().width());
         $scope.audio.currentTime = $scope.current.rawduration * ui.position.left / $(this).parent().width();
         $scope.$apply();
       },
