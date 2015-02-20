@@ -12,25 +12,35 @@
 </head>
 <body ng-app="ngAppPlayer" data-ng-controller="MusicListController" ng-csp class="ng-scope">
   <div class="ctrl-panel">
-    <span class="musicinfo-cover">
-      <img src="img/icon.png">
-    </span>
-    <div class="musicinfo" class="ng-scope">
-      <div class="musicinfo-title">{{ current.title }}</div>
-      <div class="musicinfo-artist">{{ current.artist }} - {{ current.album }}</div>
-      <div class="musicinfo-uri" ng-init="current.showinput = false">
-        <a ng-href="{{ current.uri }}" ng-attr-title="{{ current.uri }}" ng-click="current.showinput = true" ng-show="!current.showinput" onclick="return false;">{{ current.uri.truncate(50) }}</a>
-        <!-- http://cdn.y.baidu.com/yinyueren/30d43f135e7e041b190a761d19a104fc.mp3?xcode=6c03e118aaf9408f331b2f0f8247f9da51f715e84709ddb5 -->
-        <input ng-model="current.showuri" ng-blur="current.showinput = false" ng-set-focus="current.showinput" ng-show="current.showinput" ng-enter="ctrl.set(current.showuri);current.showinput = false">
+    <div class="row">
+      <div class="musicinfo-cover col-md-2">
+        <img src="img/icon.png">
       </div>
-      <div class="musicinfo-time">
-        <span class="progress-time">{{ current.time }}/{{ current.duration }}</span>
-        <div class="progress-xbar">
-          <div class="progress-buffer">
-            <div class="progress-buffer-sp" ng-repeat="buffer in current.rawbuffer" ng-style="buffersp_style(buffer)"></div>
+      <div class="musicinfo ng-scope col-md-7">
+        <div class="musicinfo-title">{{ current.title }}</div>
+        <div class="musicinfo-artist">{{ current.artist }} - {{ current.album }}</div>
+        <div class="musicinfo-uri" ng-init="current.showinput = false">
+          <a ng-href="{{ current.uri }}" ng-attr-title="{{ current.uri }}" ng-click="current.showinput = true" ng-show="!current.showinput" onclick="return false;">{{ current.uri.truncate(50) }}</a>
+          <!-- http://cdn.y.baidu.com/yinyueren/30d43f135e7e041b190a761d19a104fc.mp3?xcode=6c03e118aaf9408f331b2f0f8247f9da51f715e84709ddb5 -->
+          <input ng-model="current.showuri" ng-blur="current.showinput = false" ng-set-focus="current.showinput" ng-show="current.showinput" ng-enter="ctrl.set(current.showuri);current.showinput = false">
+        </div>
+        <div class="musicinfo-time">
+          <span class="progress-time">{{ current.time }}/{{ current.duration }}</span>
+          <div class="progress-xbar">
+            <div class="progress-buffer">
+              <div class="progress-buffer-sp" ng-repeat="buffer in current.rawbuffer" ng-style="buffersp_style(buffer)"></div>
+            </div>
+            <div class="progress-current" ng-style="current.currentstyle"></div>
+            <a class="progress-handle" ng-style="current.handlestyle"></a>
           </div>
-          <div class="progress-current" ng-style="current.currentstyle"></div>
-          <a class="progress-handle" ng-style="current.handlestyle"></a>
+        </div>
+      </div>
+      <div class="ctrlbox col-md-3">
+        <div class="volume-ctrl">
+          <div class="volume-bar">
+            <div class="volume-current"></div>
+          </div>
+          <button class="volume-mute">+</button>
         </div>
       </div>
     </div>
@@ -44,12 +54,16 @@
     </div>
   </div>
   <div class="list-panel">
-    <div class="musiclist">
-      <div class="musiclist-item" ng-repeat="music in musiclist" ng-class-odd="'musiclist-odd'" ng-class-even="'musiclist-even'">
-        <span class="musiclist-id">{{ $index + 1 }}</span>
-        <span class="musiclist-title">{{ music.title }}</span>
-        <span class="musiclist-author">{{ music.author }}</span>
-        <span class="musiclist-album">{{ music.album }}</span>
+    <div class="row">
+      <div class="col-md-2">
+      </div>
+      <div class="musiclist col-md-7">
+        <div class="musiclist-item" ng-repeat="music in musiclist" ng-class-odd="'musiclist-odd'" ng-class-even="'musiclist-even'">
+          <span class="musiclist-id">{{ $index + 1 }}</span>
+          <span class="musiclist-title">{{ music.title }}</span>
+          <span class="musiclist-author">{{ music.author }}</span>
+          <span class="musiclist-album">{{ music.album }}</span>
+        </div>
       </div>
     </div>
   </div>
