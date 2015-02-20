@@ -20,6 +20,21 @@ Number.prototype.toPercent = function() {
   return (this*100).toFixed(2) + '%';
 }
 
+String.prototype.truncate = function (strLen, separator) {
+    if (this.length <= strLen) return this;
+
+    separator = separator || '...';
+
+    var sepLen = separator.length,
+        charsToShow = strLen - sepLen,
+        frontChars = Math.ceil(charsToShow*2/3),
+        backChars = charsToShow - frontChars;
+
+    return this.substr(0, frontChars) + 
+           separator + 
+           this.substr(this.length - backChars);
+};
+
 var app = angular.module("ngAppPlayer", []);
 
 app.directive('ngEnter', function() {
