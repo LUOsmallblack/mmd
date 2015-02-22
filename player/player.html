@@ -60,13 +60,15 @@
       <div class="row">
         <div class="col-md-2">
         </div>
-        <div class="musiclist col-md-7">
-          <div class="musiclist-item" ng-repeat="music in musiclist" ng-class-odd="'musiclist-odd'" ng-class-even="'musiclist-even'">
-            <span class="musiclist-id">{{ $index + 1 }}</span>
-            <span class="musiclist-title">{{ music.title }}</span>
-            <span class="musiclist-author">{{ music.author }}</span>
-            <span class="musiclist-album">{{ music.album }}</span>
-          </div>
+        <div class="col-md-7">
+          <table class="musiclist table">
+            <tr class="musiclist-item" ng-repeat="music in musiclist" ng-class-odd="'musiclist-odd'" ng-class-even="'musiclist-even'">
+              <td class="musiclist-id">{{ $index + 1 }}</td>
+              <td class="musiclist-title">{{ music.title }}</td>
+              <td class="musiclist-author">{{ music.author }}</td>
+              <td class="musiclist-album">{{ music.album }}</td>
+            </tr>
+          </table>
         </div>
       </div>
     </div>  

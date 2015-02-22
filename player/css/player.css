@@ -177,34 +177,21 @@ body {
 }
 
 .musiclist {
-  padding: 5px;
   font-size: 14px;
   overflow-x: auto;
   overflow-y: hidden; 
-  background: blue;
 }
 
 .musiclist-item {
-  margin: 2px 0;
-  display: inline-block;
-  min-width: 100%;
-  white-space: nowrap;
   overflow: hidden;
 }
 
-.musiclist span {
-  height: 16px;
-  padding: 0px 5px;
-  display: inline-block;
-  border-right: 1px dotted gray;
-}
-
 .musiclist-odd {
-  background: lightcoral;
+  /* background: lightcoral; */
 }
 
 .musiclist-even {
-  background: lightcyan;
+  /* background: lightcyan; */
 }
 
 .musiclist-id {
