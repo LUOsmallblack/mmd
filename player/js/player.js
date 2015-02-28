@@ -66,9 +66,7 @@ app.directive('ngSetFocus',function($timeout) {
 
 app.controller("MusicListController", ["$scope", function MusicListController($scope) {
   $scope.current = {
-    title: "Title",
-    artist: "Artist",
-    album: "Album",
+    cid: 0,
     time: 0,
     duration: 0,
     buffered: [],
@@ -76,9 +74,9 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
   };
 
   $scope.musiclist = [
-    {id: 0, title: "Love&Loyalty", author: "Juji Gu", album: "", duration: "3:45"},
-    {id: 1, title: "If I were a Boy", author: "Beyonce", album: "", duration: "4:12"},
-    {id: 2, title: "Dragon Knight", author: "Jay Chou", album: "", duration: "5:07"},
+    {title: "I", artist: "google dictionary", album: "", uri: "https://ssl.gstatic.com/dictionary/static/sounds/de/0/i.mp3"},
+    {title: "am", artist: "google dictionary", album: "", uri: "https://ssl.gstatic.com/dictionary/static/sounds/de/0/am.mp3"},
+    {title: "cloud", artist: "google dictionary", album: "", uri: "https://ssl.gstatic.com/dictionary/static/sounds/de/0/cloud.mp3"},
   ];
 
   $scope.utils = {
@@ -100,7 +98,6 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     }
   };
   $scope.audio = new Audio();
-  $scope.audio.src = "http://cdn.y.baidu.com/yinyueren/30d43f135e7e041b190a761d19a104fc.mp3?xcode=6c03e118aaf9408f331b2f0f8247f9da51f715e84709ddb5";
   $scope.ctrl = {
     play: function() { $scope.audio.play(); },
     pause: function() { $scope.audio.pause(); },
@@ -126,8 +123,13 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
       $scope.current.playing = true;
       $scope.$apply();
     },
-    "pause ended": function() {
-      $scope.current.playing = false
+    "pause": function() {
+      $scope.current.playing = false;
+      $scope.$apply();
+    },
+    "ended": function() {
+      $scope.current.playing = false;
+      $scope.current.cid = $scope.current.cid + 1;
       $scope.$apply();
     },
     "progress": function() {
@@ -143,7 +145,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
       $scope.$apply();
     },
   });
-  $scope.$watch('current.uri', function(){
+  $scope.$watch('current.uri', function() {
     $scope.current.showuri = $scope.current.uri;
   })
   $scope.$watch('current.time', function() {
@@ -158,8 +160,17 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     else
       $scope.audio.pause();
   })
-  $scope.$watch('current.volume', function(){
+  $scope.$watch('current.volume', function() {
     $scope.audio.volume = $scope.current.volume;
+  })
+  $scope.$watch('current.cid', function() {
+    $scope.current.cid %= $scope.musiclist.length;
+    var i = $scope.current.cid;
+    $scope.current.title = $scope.musiclist[i].title;
+    $scope.current.artist = $scope.musiclist[i].artist;
+    $scope.current.album = $scope.musiclist[i].album;
+    $scope.audio.src = $scope.musiclist[i].uri;
+    $scope.audio.play();
   })
   $(document).ready(function() {
     $(".progress-handle").draggable({

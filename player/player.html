@@ -61,11 +61,11 @@
         <div class="col-md-2">
         </div>
         <div class="col-md-7">
-          <table class="musiclist table">
-            <tr class="musiclist-item" ng-repeat="music in musiclist" ng-class-odd="'musiclist-odd'" ng-class-even="'musiclist-even'">
+          <table class="musiclist table table-striped table-hover">
+            <tr class="musiclist-item" ng-repeat="music in musiclist" ng-class="{'warning': current.cid==$index}" ng-dblclick="current.cid=$index">
               <td class="musiclist-id">{{ $index + 1 }}</td>
               <td class="musiclist-title">{{ music.title }}</td>
-              <td class="musiclist-author">{{ music.author }}</td>
+              <td class="musiclist-author">{{ music.artist }}</td>
               <td class="musiclist-album">{{ music.album }}</td>
             </tr>
           </table>
