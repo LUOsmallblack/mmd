@@ -1,5 +1,6 @@
 <html>
 <head>
+  <meta charset="utf-8">
   <title>MMD Player</title>
   <link rel="stylesheet" type="text/css" href="css/player.css">
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
@@ -62,7 +63,7 @@
         </div>
         <div class="col-md-7">
           <table class="musiclist table table-striped table-hover">
-            <tr class="musiclist-item" ng-repeat="music in musiclist" ng-class="{'warning': current.cid==$index}" ng-dblclick="current.cid=$index">
+            <tr class="musiclist-item" ng-repeat="music in musiclist" ng-class="{'warning': current.cid==$index}" ng-dblclick="current.cid=$index" ondblclick="return false">
               <td class="musiclist-id">{{ $index + 1 }}</td>
               <td class="musiclist-title">{{ music.title }}</td>
               <td class="musiclist-author">{{ music.artist }}</td>
