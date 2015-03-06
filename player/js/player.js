@@ -21,18 +21,16 @@ Number.prototype.toPercent = function() {
 }
 
 String.prototype.truncate = function (strLen, separator) {
-    if (this.length <= strLen) return this;
+  if (this.length <= strLen) return this;
 
-    separator = separator || '...';
+  separator = separator || '...';
 
-    var sepLen = separator.length,
-        charsToShow = strLen - sepLen,
-        frontChars = Math.ceil(charsToShow*2/3),
-        backChars = charsToShow - frontChars;
+  var sepLen = separator.length,
+    charsToShow = strLen - sepLen,
+    frontChars = Math.ceil(charsToShow*2/3),
+    backChars = charsToShow - frontChars;
 
-    return this.substr(0, frontChars) + 
-           separator + 
-           this.substr(this.length - backChars);
+  return this.substr(0, frontChars) + separator + this.substr(this.length - backChars);
 };
 
 var app = angular.module("ngAppPlayer", []);
@@ -164,7 +162,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     $scope.audio.volume = $scope.current.volume;
   })
   $scope.$watch('current.cid', function() {
-    $scope.current.cid %= $scope.musiclist.length;
+    $scope.current.cid = ($scope.current.cid % $scope.musiclist.length + $scope.musiclist.length) % $scope.musiclist.length;
     var i = $scope.current.cid;
     $scope.current.title = $scope.musiclist[i].title;
     $scope.current.artist = $scope.musiclist[i].artist;

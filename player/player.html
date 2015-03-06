@@ -48,10 +48,10 @@
       </div>
       <div class="control">
         <div class="control-center" ng-init="current.playing = false">
-          <button class="btnctrl-prev" ng-click="ctrl.prev()">&#x25af;&#x25c1;</button>
+          <button class="btnctrl-prev" ng-click="current.cid=current.cid-1">&#x25af;&#x25c1;</button>
           <button class="btnctrl-play" ng-click="current.playing = true" ng-if="!current.playing">&#x25b6;</button>
           <button class="btnctrl-pause" ng-click="current.playing = false" ng-if="current.playing">&#x25ae; &#x25ae;</button>
-          <button class="btnctrl-next" ng-click="ctrl.next()">&#x25b7;&#x25af;</button>
+          <button class="btnctrl-next" ng-click="current.cid=current.cid+1">&#x25b7;&#x25af;</button>
         </div>
       </div>
     </div>
