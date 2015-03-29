@@ -63,7 +63,7 @@
         </div>
         <div class="col-md-7">
           <table class="musiclist table table-striped table-hover">
-            <tr class="musiclist-item" ng-repeat="music in musiclist" ng-class="{'warning': current.cid==$index}" ng-dblclick="current.cid=$index" ondblclick="return false">
+            <tr class="musiclist-item" ng-repeat="music in currentlist" ng-class="{'warning': current.cid==$index}" ng-dblclick="current.cid=$index" ondblclick="return false">
               <td class="musiclist-id">{{ $index + 1 }}</td>
               <td class="musiclist-title">{{ music.title }}</td>
               <td class="musiclist-author">{{ music.artist }}</td>
@@ -78,7 +78,7 @@
   <div class="modal fade" id="songInfoModal" tabindex="-1" role="dialog" aria-labelledby="songInfoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form ng-submit="ctrl.add($event)">
+        <form ng-submit="listctrl.add()">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="songInfoModalLabel">Add Song by URL</h4>
@@ -87,19 +87,19 @@
             <div class="container-fluid">
               <div class="form-group col-md-12">
                 <!-- <label for="title" class="control-label">Title:</label> -->
-                <input type="text" class="form-control" name="title" placeholder="Title">
+                <input type="text" class="form-control" ng-model="listctrl.tmp.title" name="title" placeholder="Title">
               </div>
               <div class="form-group col-md-6">
                 <!-- <label for="author" class="control-label">Author:</label> -->
-                <input type="text" class="form-control" name="artist" placeholder="Artist">
+                <input type="text" class="form-control" ng-model="listctrl.tmp.artist" name="artist" placeholder="Artist">
               </div>
               <div class="form-group col-md-6">
                 <!-- <label for="album" class="control-label">Album:</label> -->
-                <input type="text" class="form-control" name="album" placeholder="Album">
+                <input type="text" class="form-control" ng-model="listctrl.tmp.album" name="album" placeholder="Album">
               </div>
               <div class="form-group col-md-12">
                 <!-- <label for="url" class="control-label">URL:</label> -->
-                <input type="text" class="form-control" name="url" placeholder="URL">
+                <input type="text" class="form-control" ng-model="listctrl.tmp.uri" name="uri" placeholder="URL">
               </div>
             </div>
           </div>

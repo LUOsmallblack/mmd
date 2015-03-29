@@ -1,3 +1,12 @@
+musiclist = {
+  now: [
+    {title: "星月神话", artist: "金莎", album: "星月神话", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/2065932"},
+    {title: "回忆的沙漏", artist: "邓紫棋", album: "G.E.M.", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/1267392"},
+    {title: "蝴蝶", artist: "刘若英", album: "我的失败与伟大", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/1111129"},
+  ],
+  current: 'now',
+}
+
 Number.prototype.toMMSS = function() {
   var str = "", time = this;
   if (time < 0) {
@@ -71,11 +80,20 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     volume: 1,
   };
 
-  $scope.musiclist = [
-    {title: "星月神话", artist: "金莎", album: "星月神话", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/2065932"},
-    {title: "回忆的沙漏", artist: "邓紫棋", album: "G.E.M.", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/1267392"},
-    {title: "蝴蝶", artist: "刘若英", album: "我的失败与伟大", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/1111129"},
-  ];
+  $scope.currentlist = musiclist[musiclist.current];
+  $scope.listctrl = {
+    tmp: {
+      get: function() {
+        var x = {};
+        x.title = this.title;
+        x.artist = this.artist;
+        x.album = this.album;
+        x.uri = this.uri;
+        return x;
+      }
+    },
+    add: function() { $scope.currentlist.push($scope.listctrl.tmp.get()); },
+  }
 
   $scope.utils = {
     timeToPercent: function(time) {
@@ -162,12 +180,12 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     $scope.audio.volume = $scope.current.volume;
   })
   $scope.$watch('current.cid', function() {
-    $scope.current.cid = ($scope.current.cid % $scope.musiclist.length + $scope.musiclist.length) % $scope.musiclist.length;
+    $scope.current.cid = ($scope.current.cid % $scope.currentlist.length + $scope.currentlist.length) % $scope.currentlist.length;
     var i = $scope.current.cid;
-    $scope.current.title = $scope.musiclist[i].title;
-    $scope.current.artist = $scope.musiclist[i].artist;
-    $scope.current.album = $scope.musiclist[i].album;
-    $scope.audio.src = $scope.musiclist[i].uri;
+    $scope.current.title = $scope.currentlist[i].title;
+    $scope.current.artist = $scope.currentlist[i].artist;
+    $scope.current.album = $scope.currentlist[i].album;
+    $scope.audio.src = $scope.currentlist[i].uri;
     $scope.audio.play();
   })
   $(document).ready(function() {
