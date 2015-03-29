@@ -72,9 +72,9 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
   };
 
   $scope.musiclist = [
-    {title: "喜欢你", artist: "邓紫棋", album: "喜欢你", uri: "http://yinyueshiting.baidu.com/data2/music/134380992/1226741191425362461128.mp3?xcode=d9b736e197d70aa10ef86512f5b9bb0ee70c8ba5d04fc31d"},
-    {title: "回忆的沙漏", artist: "邓紫棋", album: "G.E.M.", uri: "http://yinyueshiting.baidu.com/data2/music/119085606/1267392172800128.mp3?xcode=6dd3a774e8a06036e7fd8d5c8ad4c4af7ce5516a177aab91"},
-    {title: "蝴蝶", artist: "刘若英", album: "我的失败与伟大", uri: "http://yinyueshiting.baidu.com/data2/music/64095815/11111291425398461128.mp3?xcode=be5aa522b9635863995b9f37e4a03dd234b2a22da6d65275"},
+    {title: "星月神话", artist: "金莎", album: "星月神话", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/2065932"},
+    {title: "回忆的沙漏", artist: "邓紫棋", album: "G.E.M.", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/1267392"},
+    {title: "蝴蝶", artist: "刘若英", album: "我的失败与伟大", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/1111129"},
   ];
 
   $scope.utils = {
