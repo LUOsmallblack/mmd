@@ -162,15 +162,16 @@ input, textarea {
 .control-center button {
   width: 80px;
   height: 80px;
-  margin: 5px 10px;
-  display: inline-block;
   font-size: 60px;
-  overflow: hidden;
-  letter-spacing: -10px;
   text-align: center;
-  line-height: 0px;
-  padding: 0 10px 0 0;
   border: 0px;
+  color: black;
+  background: transparent;
+  transition: color .2s ease-in-out;
+}
+
+.control-center button:hover {
+  color: coral;
   background: transparent;
 }
 
@@ -187,7 +188,7 @@ input, textarea {
 .musiclist {
   font-size: 14px;
   overflow-x: auto;
-  overflow-y: hidden; 
+  overflow-y: hidden;
 }
 
 .musiclist-item {

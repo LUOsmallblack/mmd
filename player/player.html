@@ -47,11 +47,11 @@
         </div>
       </div>
       <div class="control">
-        <div class="control-center" ng-init="current.playing = false">
-          <button class="btnctrl-prev" ng-click="current.cid=current.cid-1">&#x25af;&#x25c1;</button>
-          <button class="btnctrl-play" ng-click="current.playing = true" ng-if="!current.playing">&#x25b6;</button>
-          <button class="btnctrl-pause" ng-click="current.playing = false" ng-if="current.playing">&#x25ae; &#x25ae;</button>
-          <button class="btnctrl-next" ng-click="current.cid=current.cid+1">&#x25b7;&#x25af;</button>
+        <div class="control-center btn-group">
+          <button type="button" class="btn btn-default btnctrl-prev" aria-label="Prev" ng-click="current.cid=current.cid-1"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+          <button type="button" class="btn btn-default btnctrl-play" aria-label="Play" ng-click="current.playing = true" ng-if="!current.playing"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+          <button type="button" class="btn btn-default btnctrl-pause" aria-label="Pause" ng-click="current.playing = false" ng-if="current.playing"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>
+          <button type="button" class="btn btn-default btnctrl-next" aria-label="Next" ng-click="current.cid=current.cid+1"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
         </div>
       </div>
     </div>
