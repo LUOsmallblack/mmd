@@ -1,6 +1,13 @@
 const exts=["flv","hlv","f4v","mp4","mp3","wma","swf"];
 const regname = /filename[^;=\n]*=\s*((['"]).*?\2|[^;\n]*)/
 medialist = {};
+musicplayer = null;
+
+chrome.runtime.onMessage.addListener(function(msg, sender) {
+  console.log(msg);
+  console.log(sender.tab);
+  musicplayer = tab.id;
+})
 
 function getHeaderValue(name, data){
   name = name.toLowerCase();

@@ -14,7 +14,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://5sing.kugou.com/*"],
+      "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
   ],
