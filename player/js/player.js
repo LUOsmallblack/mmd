@@ -99,7 +99,10 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
       $scope.currentlist.push(x);
     },
   }
-  addMusic = $scope.listctrl.add;
+  playLast = function() {
+    $scope.current.cid = -1;
+    $scope.$apply();
+  }
 
   $scope.utils = {
     timeToPercent: function(time) {

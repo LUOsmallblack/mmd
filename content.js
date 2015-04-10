@@ -11,8 +11,7 @@ if (/player\.html/.test(location.href)) {
           document.getElementById("tmp-album").setAttribute("value", request.music.album);
           document.getElementById("tmp-uri").setAttribute("value", request.music.uri);
           document.getElementById("tmp-submit").click();
-          var list = document.getElementsByClassName("musiclist")[0].children[0].children;
-          list[list.length-1].ondblclick();
+          document.getElementById("clouds-music-movement-door-player").click();
         }
         return true;
       }
