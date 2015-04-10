@@ -32,16 +32,25 @@ $(function(){
       } else {
         $("#textMp3").text("Not found");
       }
-      var table = $("#mediaUrls");
-      var medialist = BG.medialist[tabid]
-      for (var i=0; i<medialist.length; i++) {
-        var row = $("<li id=url_"+i+"></li>").append($("<a>", {text: medialist[i][0], href: medialist[i][1]}));
-        table.append(row);
-      }
-      $('a').click(function(){
+
+      $('a').on("click.href", function() {
         chrome.tabs.create({url: $(this).attr('href')});
         return false;
       });
+
+      $("#showMore").click(function() {
+        var table = $("#mediaUrls");
+        var medialist = BG.medialist[tabid]
+        for (var i=0; i<medialist.length; i++) {
+          var row = $("<li id=url_"+i+"></li>").append($("<a>", {text: medialist[i][0], href: medialist[i][1]}));
+          table.append(row);
+        }
+        $('a').off("click.href");
+        $('a').on("click.href", function() {
+          chrome.tabs.create({url: $(this).attr('href')});
+          return false;
+        });
+      })
     }
   );
 });
