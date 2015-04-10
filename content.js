@@ -2,6 +2,21 @@ if (/player\.html/.test(location.href)) {
   if (document.getElementById("clouds-music-movement-door-player")) {
     console.log("found player in content");
     chrome.runtime.sendMessage("Found");
+    chrome.runtime.onMessage.addListener(
+      function(request, sender, sendResponse) {
+        console.log("Adding music...")
+        if (request.action == "addMusic") {
+          document.getElementById("tmp-title").setAttribute("value", request.music.title);
+          document.getElementById("tmp-artist").setAttribute("value", request.music.artist);
+          document.getElementById("tmp-album").setAttribute("value", request.music.album);
+          document.getElementById("tmp-uri").setAttribute("value", request.music.uri);
+          document.getElementById("tmp-submit").click();
+          var list = document.getElementsByClassName("musiclist")[0].children[0].children;
+          list[list.length-1].ondblclick();
+        }
+        return true;
+      }
+    );
   }
 }
 

@@ -19,6 +19,7 @@ $(function(){
       var url=tabs[0].url;
       var tabid=tabs[0].id;
       var urlarr=url.split("/");
+      var music=null;
       console.log("tabid:"+tabid+"->"+urlarr[2]);
       if(urlarr[2]=="5sing.kugou.com") {
         $("#textMp3").text("Working...");
@@ -27,16 +28,21 @@ $(function(){
             console.log(chrome.runtime.lastError.message);
             console.log("url:"+resp.uri);
           }
+          music=resp;
           $("#songList > tbody:last").append("<tr><td><a href=\"{3}\">{0}</a></td><td>{1}</td><td>{2}<td/></tr>".format(resp.title, resp.artist, resp.album, resp.uri));
+          $('a').on("click.href", function() {
+            console.log("sending")
+            if (BG.musicplayer) {
+              console.log("sent")
+              chrome.tabs.sendMessage(BG.musicplayer, {'action': "addMusic", 'music': music})
+            }
+            return false;
+          });
         });
       } else {
         $("#textMp3").text("Not found");
       }
-
-      $('a').on("click.href", function() {
-        chrome.tabs.create({url: $(this).attr('href')});
-        return false;
-      });
+      console.log("mp:"+BG.musicplayer);
 
       $("#showMore").click(function() {
         var table = $("#mediaUrls");

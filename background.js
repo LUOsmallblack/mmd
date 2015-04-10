@@ -6,7 +6,7 @@ musicplayer = null;
 chrome.runtime.onMessage.addListener(function(msg, sender) {
   console.log(msg);
   console.log(sender.tab);
-  musicplayer = tab.id;
+  musicplayer = sender.tab.id;
 })
 
 function getHeaderValue(name, data){

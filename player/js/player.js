@@ -82,18 +82,24 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
 
   $scope.currentlist = musiclist[musiclist.current];
   $scope.listctrl = {
-    tmp: {
-      get: function() {
-        var x = {};
-        x.title = this.title;
-        x.artist = this.artist;
-        x.album = this.album;
-        x.uri = this.uri;
-        return x;
+    add: function(tmp) {
+      var x = {};
+      if (tmp) {
+        x.title = tmp.title;
+        x.artist = tmp.artist;
+        x.album = tmp.album;
+        x.uri = tmp.uri;
+      } else {
+        x.title = $("#tmp-title").val();
+        x.artist = $("#tmp-artist").val();
+        x.album = $("#tmp-album").val();
+        x.uri = $("#tmp-uri").val();
+        $("#songInfoModal").modal('hide');
       }
+      $scope.currentlist.push(x);
     },
-    add: function() { $scope.currentlist.push($scope.listctrl.tmp.get()); },
   }
+  addMusic = $scope.listctrl.add;
 
   $scope.utils = {
     timeToPercent: function(time) {
