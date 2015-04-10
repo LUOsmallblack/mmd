@@ -1,3 +1,15 @@
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
+
 console.log(location.href+" loaded");
 console.log("with jQuery-"+$.fn.jquery);
 var BG = chrome.extension.getBackgroundPage();
@@ -8,13 +20,14 @@ $(function(){
       var tabid=tabs[0].id;
       var urlarr=url.split("/");
       console.log("tabid:"+tabid+"->"+urlarr[2]);
-      $("#textUrl").replaceWith($("<a>", {text: tabs[0].title, href: url}));
       if(urlarr[2]=="5sing.kugou.com") {
         $("#textMp3").text("Working...");
         chrome.tabs.sendMessage(tabid, {action: "getResource"}, function(resp) {
-          console.log(chrome.runtime.lastError);
-          console.log("url:"+resp.mp3);
-          $("#textMp3").text(resp.mp3);
+          if (chrome.runtime.lastError) {
+            console.log(chrome.runtime.lastError.message);
+            console.log("url:"+resp.uri);
+          }
+          $("#songList > tbody:last").append("<tr><td><a href=\"{3}\">{0}</a></td><td>{1}</td><td>{2}<td/></tr>".format(resp.title, resp.artist, resp.album, resp.uri));
         });
       } else {
         $("#textMp3").text("Not found");

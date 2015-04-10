@@ -24,10 +24,8 @@ if (!Array.prototype.last){
     };
 };
 
-console.log(chrome.webRequest);
 chrome.webRequest.onResponseStarted.addListener(
   function(data) {
-    console.log(data);
     var type = getHeaderValue("Content-Type", data);
     var name = getHeaderValue("Content-Disposition", data);
     if (name && name!="") {
