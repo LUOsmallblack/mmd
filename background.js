@@ -31,6 +31,37 @@ if (!Array.prototype.last){
     };
 };
 
+chrome.webRequest.onBeforeRequest.addListener(
+  function(details) {
+    var ts = details.url.match(/^(https?):\/\/([^\/.]*)\.?5sing\.com(\/?[\S\s]*)$/);
+    console.log(details.url);
+    console.log(ts);
+    if (ts) {
+      if (ts[1]) {
+        ts[1] = ts[1] + "://"
+      } else {
+        ts[1] = "//"
+      }
+      if (!ts[2] || ts[2]=="www") {
+        ts[2] = ts[3] || "";
+      } else {
+        ts[2] = "/" + ts[2] + ts[3]
+      }
+      return {redirectUrl: ts[1] + "5sing.kugou.com" + ts[2]};
+    } else {
+      console.log("match:"+details.url+ts);
+    }
+    return {redirectUrl: "//5sing.kugou.com"};
+  },
+  {
+    urls: [
+      "*://*.5sing.com/*",
+    ],
+    types: ["main_frame", "sub_frame", "stylesheet", "script", "image", "object", "xmlhttprequest", "other"]
+  },
+  ["blocking"]
+);
+
 chrome.webRequest.onResponseStarted.addListener(
   function(data) {
     var type = getHeaderValue("Content-Type", data);

@@ -21,9 +21,10 @@
   "permissions": [
     "tabs",
     "webRequest",
+    "webRequestBlocking",
     "<all_urls>"
   ],
-  "content_security_policy": "script-src 'self' https://code.jquery.com; object-src 'self'"
+  "content_security_policy": "script-src 'self'; object-src 'self'"
 }
 
 // vim: set expandtab ts=2 sw=2:
