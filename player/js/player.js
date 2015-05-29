@@ -79,7 +79,11 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     buffered: [],
     volume: 1,
   };
-
+  
+  if (typeof(Storage) != "undefined") {
+    $scope.current.volume = parseFloat(localStorage["music.volume"]);
+  }
+  
   $scope.currentlist = musiclist[musiclist.current];
   $scope.listctrl = {
     add: function(tmp) {
@@ -187,6 +191,9 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
   })
   $scope.$watch('current.volume', function() {
     $scope.audio.volume = $scope.current.volume;
+    if (typeof(Storage) != "undefined") { 
+      localStorage.setItem("music.volume", $scope.current.volume);
+    }
   })
   $scope.$watch('current.cid', function() {
     $scope.current.cid = ($scope.current.cid % $scope.currentlist.length + $scope.currentlist.length) % $scope.currentlist.length;
