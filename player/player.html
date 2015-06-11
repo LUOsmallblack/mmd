@@ -64,7 +64,7 @@
         </div>
         <div class="col-md-7">
           <table class="musiclist table table-striped table-hover">
-            <tr class="musiclist-item" ng-repeat="music in currentlist" ng-class="{'warning': current.cid==$index}" ng-dblclick="current.cid=$index" ondblclick="return false">
+            <tr class="musiclist-item" ng-repeat="music in currentlist track by $index" ng-class="{'warning': current.cid==$index}" ng-dblclick="current.cid=$index" ondblclick="return false">
               <td class="musiclist-id">{{ $index + 1 }}</td>
               <td class="musiclist-title">{{ music.title }}</td>
               <td class="musiclist-author">{{ music.artist }}</td>
