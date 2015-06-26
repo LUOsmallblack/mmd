@@ -1,10 +1,16 @@
-musiclist = 
-[
+musiclist = [
   {title: "星月神话", artist: "金莎", album: "星月神话", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/2065932"},
   {title: "回忆的沙漏", artist: "邓紫棋", album: "G.E.M.", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/1267392"},
   {title: "蝴蝶", artist: "刘若英", album: "我的失败与伟大", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/1111129"},
 ];
 
+if (typeof(Storage) == "undefined") {
+  console.log("WARNING: can't storage!")
+  localStorage = {
+    getItem: function(){},
+    setItem: function(){}
+  }
+}
 
 Number.prototype.toMMSS = function() {
   var str = "", time = this;
@@ -78,10 +84,10 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     buffered: [],
     volume: 1,
   };
-  
+
   // retrive volumn in local storage
-  if (localStorage["music.volume"] != null) {
-    $scope.current.volume = parseFloat(localStorage["music.volume"]);
+  if (localStorage["music_volume"] != null) {
+    $scope.current.volume = localStorage["music_volume"]*1;
   }
 
   // retrive music list in local storage
@@ -90,7 +96,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
   } else {
     $scope.currentlist = musiclist;
   }
-  
+
   $scope.listctrl = {
     add: function(tmp) {
       var x = {};
@@ -107,7 +113,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
         $("#songInfoModal").modal('hide');
       }
       $scope.currentlist.push(x);
-      localStorage.setItem('musiclist', JSON.stringify($scope.currentlist));
+      localStorage['musiclist'] = JSON.stringify($scope.currentlist);
     },
   }
   playLast = function() {
@@ -198,9 +204,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
   })
   $scope.$watch('current.volume', function() {
     $scope.audio.volume = $scope.current.volume;
-    if (typeof(Storage) != "undefined") { 
-      localStorage.setItem("music.volume", $scope.current.volume);
-    }
+    localStorage["music_volume"] = $scope.current.volume;
   })
   $scope.$watch('current.cid', function() {
     $scope.current.cid = ($scope.current.cid % $scope.currentlist.length + $scope.currentlist.length) % $scope.currentlist.length;
