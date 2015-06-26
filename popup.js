@@ -47,6 +47,7 @@ $(function(){
       $("#showMore").click(function() {
         var table = $("#mediaUrls");
         var medialist = BG.medialist[tabid];
+        table.children().remove();
         for (var i=0; i<medialist.length; i++) {
           var row = $("<li id=url_"+i+"></li>").append($("<a>", {text: medialist[i][0], href: medialist[i][1]}));
           table.append(row);
