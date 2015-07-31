@@ -29,7 +29,7 @@ $(function(){
             console.log("url:"+resp.uri);
           }
           music=resp;
-          $("#songList > tbody:last").append("<tr><td><a href=\"{3}\">{0}</a></td><td>{1}</td><td>{2}<td/></tr>".format(resp.title, resp.artist, resp.album, resp.uri));
+          $("#songList > tbody:last").append("<tr><td nowrap><a href=\"{2}\">{0}</a></td><td>{1}</td><td><a href=\"{2}\">{2}</a></td></tr>".format(resp.title, resp.artist, resp.uri));
           $('a').on("click.href", function() {
             console.log("sending")
             if (BG.musicplayer) {

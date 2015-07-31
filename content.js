@@ -8,7 +8,6 @@ if (/player\.html/.test(location.href)) {
         if (request.action == "addMusic") {
           document.getElementById("tmp-title").setAttribute("value", request.music.title);
           document.getElementById("tmp-artist").setAttribute("value", request.music.artist);
-          document.getElementById("tmp-album").setAttribute("value", request.music.album);
           document.getElementById("tmp-uri").setAttribute("value", request.music.uri);
           document.getElementById("tmp-submit").click();
           document.getElementById("clouds-music-movement-door-player").click();
@@ -28,7 +27,7 @@ if (/5sing\.kugou\.com\/(yc|fc)\/\d+.html/.test(location.href)) {
         var title = document.getElementsByClassName("song_title")[0].innerHTML;
         var artist = document.getElementsByClassName("view_info")[0].children[0].children[0].children[1].innerHTML;
         var uri = /file=([^&]*)&?/.exec(document.getElementsByTagName("embed")[0].attributes.getNamedItem("flashvars").nodeValue)[1];
-        sendResponse({'title': title, 'artist': artist, 'album': "-", 'uri': uri});
+        sendResponse({'title': title, 'artist': artist, 'uri': uri});
       } else {
         sendResponse({});
       }

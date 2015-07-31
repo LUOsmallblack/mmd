@@ -5,7 +5,7 @@ musicplayer = null;
 
 chrome.runtime.onMessage.addListener(function(msg, sender) {
   console.log(msg);
-  console.log(sender.tab);
+  console.log(sender.tab.id, sender.tab.url);
   musicplayer = sender.tab.id;
 })
 
@@ -35,7 +35,6 @@ chrome.webRequest.onBeforeRequest.addListener(
   function(details) {
     var ts = details.url.match(/^(https?):\/\/([^\/.]*)\.?5sing\.com(\/?[\S\s]*)$/);
     console.log(details.url);
-    console.log(ts);
     if (ts) {
       if (ts[1]) {
         ts[1] = ts[1] + "://"
@@ -47,6 +46,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       } else {
         ts[2] = "/" + ts[2] + ts[3]
       }
+      console.log(ts[1] + "5sing.kugou.com" + ts[2])
       return {redirectUrl: ts[1] + "5sing.kugou.com" + ts[2]};
     } else {
       console.log("match:"+details.url+ts);

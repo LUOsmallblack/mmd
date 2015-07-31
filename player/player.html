@@ -21,10 +21,9 @@
         </div>
         <div class="musicinfo ng-scope col-md-7">
           <div class="musicinfo-title">{{ current.title }}</div>
-          <div class="musicinfo-artist">{{ current.artist }} - {{ current.album }}</div>
+          <div class="musicinfo-artist">{{ current.artist }}</div>
           <div class="musicinfo-uri" ng-init="current.showinput = false">
             <a ng-href="{{ current.uri }}" ng-attr-title="{{ current.uri }}" ng-click="current.showinput = true" ng-show="!current.showinput" onclick="return false;">{{ current.uri.truncate(50) }}</a>
-            <!-- http://cdn.y.baidu.com/yinyueren/30d43f135e7e041b190a761d19a104fc.mp3?xcode=6c03e118aaf9408f331b2f0f8247f9da51f715e84709ddb5 -->
             <input ng-model="current.showuri" ng-blur="current.showinput = false" ng-set-focus="current.showinput" ng-show="current.showinput" ng-enter="ctrl.set(current.showuri);current.showinput = false">
           </div>
           <div class="musicinfo-time">
@@ -68,7 +67,6 @@
               <td class="musiclist-id">{{ $index + 1 }}</td>
               <td class="musiclist-title">{{ music.title }}</td>
               <td class="musiclist-author">{{ music.artist }}</td>
-              <td class="musiclist-album">{{ music.album }}</td>
             </tr>
           </table>
           <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#songInfoModal">Add Song</button>
@@ -90,13 +88,9 @@
                 <!-- <label for="title" class="control-label">Title:</label> -->
                 <input id="tmp-title" type="text" class="form-control" name="title" placeholder="Title">
               </div>
-              <div class="form-group col-md-6">
+              <div class="form-group col-md-12">
                 <!-- <label for="author" class="control-label">Author:</label> -->
                 <input id="tmp-artist" type="text" class="form-control" name="artist" placeholder="Artist">
-              </div>
-              <div class="form-group col-md-6">
-                <!-- <label for="album" class="control-label">Album:</label> -->
-                <input id="tmp-album" type="text" class="form-control" name="album" placeholder="Album">
               </div>
               <div class="form-group col-md-12">
                 <!-- <label for="url" class="control-label">URL:</label> -->

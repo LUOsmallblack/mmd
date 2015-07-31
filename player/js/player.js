@@ -1,7 +1,5 @@
 musiclist = [
-  {title: "星月神话", artist: "金莎", album: "星月神话", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/2065932"},
-  {title: "回忆的沙漏", artist: "邓紫棋", album: "G.E.M.", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/1267392"},
-  {title: "蝴蝶", artist: "刘若英", album: "我的失败与伟大", uri: "https://id3tag-clouds56.rhcloud.com/proxy/baidu/1111129"},
+  {title: "化鹤归", artist: "司夏", uri: "http://m1.music.126.net/nmhDax3Joqxno26m0Rbiwg==/7859309115389330.mp3"},
 ];
 
 if (typeof(Storage) == "undefined") {
@@ -103,12 +101,10 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
       if (tmp) {
         x.title = tmp.title;
         x.artist = tmp.artist;
-        x.album = tmp.album;
         x.uri = tmp.uri;
       } else {
         x.title = $("#tmp-title").val();
         x.artist = $("#tmp-artist").val();
-        x.album = $("#tmp-album").val();
         x.uri = $("#tmp-uri").val();
         $("#songInfoModal").modal('hide');
       }
@@ -211,7 +207,6 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     var i = $scope.current.cid;
     $scope.current.title = $scope.currentlist[i].title;
     $scope.current.artist = $scope.currentlist[i].artist;
-    $scope.current.album = $scope.currentlist[i].album;
     $scope.audio.src = $scope.currentlist[i].uri;
     $scope.audio.play();
   })
