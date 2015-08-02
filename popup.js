@@ -29,13 +29,24 @@ $(function(){
             console.log("url:"+resp.uri);
           }
           music=resp;
-          $("#songList > tbody:last").append("<tr><td nowrap><a href=\"{2}\">{0}</a></td><td>{1}</td><td><a href=\"{2}\">{2}</a></td></tr>".format(resp.title, resp.artist, resp.uri));
-          $('a').on("click.href", function() {
+          $("#songList > tbody:last").append(
+            "<tr>"+
+              "<td nowrap>{0}</td>"+
+              "<td>{1}</td>"+
+              "<td><a href=\"{2}\">{2}</a></td>"+
+              "<td><button class=\"btn btn-primary btn-add\">Add</button></td>"+
+            "</tr>".format(resp.title, resp.artist, resp.uri));
+          $('.btn-add').on("click", function() {
             console.log("sending")
             if (BG.musicplayer) {
               console.log("sent")
               chrome.tabs.sendMessage(BG.musicplayer, {'action': "addMusic", 'music': music})
             }
+            return false;
+          });
+          $('a').off("click.href");
+          $('a').on("click.href", function() {
+            chrome.tabs.create({url: $(this).attr('href')});
             return false;
           });
         });
