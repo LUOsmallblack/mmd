@@ -35,9 +35,9 @@ module.exports = function(grunt) {
           packageSpecific: {
             bootstrap: {
               files: [
-                'dist/css/bootstrap-theme.css',
+                'dist/css/bootstrap-theme.min.css',
                 'dist/css/bootstrap-theme.css.map',
-                'dist/css/bootstrap.css',
+                'dist/css/bootstrap.min.css',
                 'dist/css/bootstrap.css.map',
                 'dist/js/bootstrap.min.js',
                 'fonts/*'
