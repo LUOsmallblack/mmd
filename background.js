@@ -91,9 +91,9 @@ chrome.webRequest.onResponseStarted.addListener(
       return;
     }
     if (!medialist[data.tabId]) {
-      medialist[data.tabId] = [];
+      medialist[data.tabId] = LRUCache();
     }
-    medialist[data.tabId].push([name, data.url]);
+    medialist[data.tabId].set(data.url, [name, data.url]);
   },
   {urls: ["<all_urls>"],types: ["object","other"]},
   ["responseHeaders"]

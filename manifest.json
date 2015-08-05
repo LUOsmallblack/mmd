@@ -10,7 +10,7 @@
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": ["vender/cptable.full.js", "background.js"]
+    "scripts": ["vender/lru-cache.js", "vender/cptable.full.js", "background.js"]
   },
   "content_scripts": [
     {
