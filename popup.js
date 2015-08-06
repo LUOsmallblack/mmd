@@ -30,12 +30,12 @@ $(function(){
           }
           music=resp;
           $("#songList > tbody:last").append(
-            "<tr>"+
+            ("<tr>"+
               "<td nowrap>{0}</td>"+
               "<td>{1}</td>"+
               "<td><a href=\"{2}\">{2}</a></td>"+
               "<td><button class=\"btn btn-primary btn-add\">Add</button></td>"+
-            "</tr>".format(resp.title, resp.artist, resp.uri));
+            "</tr>").format(resp.title, resp.artist, resp.uri));
           $('.btn-add').on("click", function() {
             console.log("sending")
             if (BG.musicplayer) {
