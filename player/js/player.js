@@ -1,6 +1,11 @@
-var MusicList = function(l) {
-  this._list = l || [];
-  this._version = 0;
+var MusicList = function(m) {
+  if (m instanceof MusicList || (m instanceof Object && m.list)) {
+    this.list = m.list;
+    this.version = m.version;
+  } else if (m == null || m instanceof Array) {
+    this.list = m || [];
+    this.version = 0;
+  }
 }
 
 MusicList.prototype.filter = function(callback, thisArg) {
@@ -8,7 +13,7 @@ MusicList.prototype.filter = function(callback, thisArg) {
 };
 
 MusicList.prototype.toArray = function() {
-  return this._list.slice();
+  return this.list.slice();
 }
 
 MusicList.prototype.sorted = function(compareFunction) {
@@ -31,10 +36,10 @@ MusicList.prototype.push = function(entry) {
   // TODO: music-artist, lyc-artist, and lyc-content, origin-url
   // TODO: tag
   entry.date = new Date().toISOString();
-  entry.order = this._list.length;
+  entry.order = this.list.length;
   entry.random = Math.random();
-  this._list.push(entry);
-  this._version += 1;
+  this.list.push(entry);
+  this.version += 1;
 }
 
 musiclist = new MusicList();
@@ -237,7 +242,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
   })
   $scope.$watch('musiclist._version', function() {
     $scope.currentlist = $scope.musiclist.toArray();
-    localStorage['musiclist'] = JSON.stringify($scope.musiclist._list);
+    localStorage['musiclist'] = JSON.stringify($scope.musiclist);
   })
   $scope.$watch('current.cid', function() {
     var i = $scope.current.cid, len = $scope.currentlist.length;
