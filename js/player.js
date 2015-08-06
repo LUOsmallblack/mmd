@@ -1,6 +1,43 @@
-musiclist = [
-  {title: "化鹤归", artist: "司夏", uri: "http://m1.music.126.net/nmhDax3Joqxno26m0Rbiwg==/7859309115389330.mp3"},
-];
+var MusicList = function(l) {
+  this._list = l || [];
+  this._version = 0;
+}
+
+MusicList.prototype.filter = function(callback, thisArg) {
+  return new MusicList(l.filter(callback, thisArg));
+};
+
+MusicList.prototype.toArray = function() {
+  return this._list.slice();
+}
+
+MusicList.prototype.sorted = function(compareFunction) {
+  return new MusicList(l.slice().sort(compareFunction));
+}
+
+MusicList.prototype.sortedBy = function(keyName) {
+  return this.sorted(function(a, b) {
+    if (a[keyName] < b[keyName]) {
+      return -1;
+    } else if (a[keyName] > b[keyName]) {
+      return 1;
+    }
+    return 0;
+  })
+}
+
+MusicList.prototype.push = function(entry) {
+  // title, artist, uri, date, deleted(optional), order, random
+  // TODO: music-artist, lyc-artist, and lyc-content, origin-url
+  // TODO: tag
+  entry.date = new Date().toISOString();
+  entry.order = this._list.length;
+  entry.random = Math.random();
+  this._list.push(entry);
+  this._version += 1;
+}
+
+musiclist = new MusicList();
 
 if (typeof(Storage) == "undefined") {
   console.log("WARNING: can't storage!")
@@ -90,10 +127,10 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
 
   // retrive music list in local storage
   if (localStorage['musiclist'] != null) {
-    $scope.currentlist = JSON.parse(localStorage['musiclist']);
-  } else {
-    $scope.currentlist = musiclist;
+    musiclist = new MusicList(JSON.parse(localStorage['musiclist']));
   }
+  $scope.musiclist = musiclist;
+  $scope.currentlist = musiclist.toArray();
 
   $scope.listctrl = {
     add: function(tmp) {
@@ -108,8 +145,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
         x.uri = $("#tmp-uri").val();
         $("#songInfoModal").modal('hide');
       }
-      $scope.currentlist.push(x);
-      localStorage['musiclist'] = JSON.stringify($scope.currentlist);
+      musiclist.push(x);
     },
   }
   playLast = function() {
@@ -189,10 +225,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
   $scope.$watch('current.time', function() {
     $scope.audio.currentTime = $scope.current.time;
   })
-  $scope.$watch('current.playing', function(newval, oldval){
-    if (newval == oldval) {
-      return console.log("playing same");
-    }
+  $scope.$watch('current.playing', function(newval, oldval) {
     if (newval)
       $scope.audio.play();
     else
@@ -202,9 +235,21 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     $scope.audio.volume = $scope.current.volume;
     localStorage["music_volume"] = $scope.current.volume;
   })
+  $scope.$watch('musiclist._version', function() {
+    $scope.currentlist = $scope.musiclist.toArray();
+    localStorage['musiclist'] = JSON.stringify($scope.musiclist._list);
+  })
   $scope.$watch('current.cid', function() {
-    $scope.current.cid = ($scope.current.cid % $scope.currentlist.length + $scope.currentlist.length) % $scope.currentlist.length;
-    var i = $scope.current.cid;
+    var i = $scope.current.cid, len = $scope.currentlist.length;
+    if (len == 0) {
+      $scope.current.title = "Empty";
+      $scope.current.artist = "";
+      $scope.audio.src = "";
+      $scope.audio.pause();
+      return;
+    }
+    i = (i % len + len) % len;
+    $scope.current.cid = i;
     $scope.current.title = $scope.currentlist[i].title;
     $scope.current.artist = $scope.currentlist[i].artist;
     $scope.audio.src = $scope.currentlist[i].uri;

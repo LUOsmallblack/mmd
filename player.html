@@ -49,7 +49,7 @@
       <div class="control">
         <div class="control-center btn-group">
           <button type="button" class="btn btn-default btnctrl-prev" aria-label="Prev" ng-click="current.cid=current.cid-1"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-          <button type="button" class="btn btn-default btnctrl-play" aria-label="Play" ng-click="current.playing = true" ng-if="!current.playing"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+          <button type="button" class="btn btn-default btnctrl-play" aria-label="Play" ng-click="current.playing = true" ng-if="!current.playing" disabled="{{!currentlist.length}}"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
           <button type="button" class="btn btn-default btnctrl-pause" aria-label="Pause" ng-click="current.playing = false" ng-if="current.playing"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>
           <button type="button" class="btn btn-default btnctrl-next" aria-label="Next" ng-click="current.cid=current.cid+1"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
         </div>
