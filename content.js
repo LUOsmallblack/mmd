@@ -10,7 +10,7 @@ if (/player\.html/.test(location.href)) {
           document.getElementById("tmp-artist").setAttribute("value", request.music.artist);
           document.getElementById("tmp-uri").setAttribute("value", request.music.uri);
           document.getElementById("tmp-submit").click();
-          document.getElementById("clouds-music-movement-door-player").click();
+          //document.getElementById("clouds-music-movement-door-player").click();
         }
         return true;
       }
