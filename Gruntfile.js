@@ -6,7 +6,7 @@ module.exports = function(grunt) {
         dest: 'vender',
         options: {
           keepExpandedHierarchy: false,
-          ignorePackages: ['angular', 'jquery-ui'],
+          ignorePackages: ['angular', 'jquery-ui', 'dexie'],
           packageSpecific: {
             bootstrap: {
               files: [
@@ -58,6 +58,12 @@ module.exports = function(grunt) {
               files: [
                 'angular.min.js',
                 'angular.min.js.map'
+              ]
+            },
+            dexie: {
+              files: [
+                'dist/latest/Dexie.min.js',
+                'dist/latest/Dexie.min.js.map'
               ]
             }
           }

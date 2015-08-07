@@ -20,6 +20,7 @@
     "lru-cache": "~2.6.5",
     "jquery": "~2.1.4",
     "angular": "~1.4.3",
-    "jquery-ui": "~1.11.4"
+    "jquery-ui": "~1.11.4",
+    "dexie": "~1.1.0"
   }
 }

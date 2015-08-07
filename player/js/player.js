@@ -1,45 +1,33 @@
-var MusicList = function(m) {
-  if (m instanceof MusicList || (m instanceof Object && m.list)) {
-    this.list = m.list;
-    this.version = m.version;
-  } else if (m == null || m instanceof Array) {
-    this.list = m || [];
-    this.version = 0;
+function errlog(str) {
+  return function(err) {console.log(str + " : " + err)}
+}
+
+var db = new Dexie("MusicPlayer");
+db.version(1).stores({musiclist:"++id,title,artist,uri,date,deleted,&order,random,*tags"});
+db.open().catch(errlog("Open database failed"));
+db.musiclist.hook("creating", function(PK, obj, tran) {
+  obj.date = new Date().toISOString();
+  obj.order = PK;
+  obj.random = Math.random();
+  obj.tags = obj.tags || []
+})
+
+// db.musiclist.orderBy("order").limit(1).toArray(function(){});
+
+var MusicList = function(m) {}
+
+MusicList.prototype.toArray = function(mode, func) {
+  if (mode == "random" || mode == "order") {
+    return db.musiclist.orderBy(mode).toArray(func).catch(errlog("toArray failed"));
   }
-}
-
-MusicList.prototype.filter = function(callback, thisArg) {
-  return new MusicList(l.filter(callback, thisArg));
-};
-
-MusicList.prototype.toArray = function() {
-  return this.list.slice();
-}
-
-MusicList.prototype.sorted = function(compareFunction) {
-  return new MusicList(l.slice().sort(compareFunction));
-}
-
-MusicList.prototype.sortedBy = function(keyName) {
-  return this.sorted(function(a, b) {
-    if (a[keyName] < b[keyName]) {
-      return -1;
-    } else if (a[keyName] > b[keyName]) {
-      return 1;
-    }
-    return 0;
-  })
+  return db.musiclist.toArray(func).catch(errlog("toArray failed"));
 }
 
 MusicList.prototype.push = function(entry) {
   // title, artist, uri, date, deleted(optional), order, random
   // TODO: music-artist, lyc-artist, and lyc-content, origin-url
   // TODO: tag
-  entry.date = new Date().toISOString();
-  entry.order = this.list.length;
-  entry.random = Math.random();
-  this.list.push(entry);
-  this.version += 1;
+  db.musiclist.add(entry);
 }
 
 musiclist = new MusicList();
@@ -130,12 +118,14 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     $scope.current.volume = localStorage["music_volume"]*1;
   }
 
-  // retrive music list in local storage
-  if (localStorage['musiclist'] != null) {
-    musiclist = new MusicList(JSON.parse(localStorage['musiclist']));
+  function setMusiclist(ml) {
+    $scope.currentlist = ml || $scope.currentlist || [];
   }
+
+  // retrive music list in local storage
   $scope.musiclist = musiclist;
-  $scope.currentlist = musiclist.toArray();
+  $scope.currentlist = [];
+  musiclist.toArray("order", setMusiclist);
 
   $scope.listctrl = {
     add: function(tmp) {
@@ -150,7 +140,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
         x.uri = $("#tmp-uri").val();
         $("#songInfoModal").modal('hide');
       }
-      musiclist.push(x);
+      $scope.musiclist.push(x);
     },
   }
   playLast = function() {
@@ -239,10 +229,6 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
   $scope.$watch('current.volume', function() {
     $scope.audio.volume = $scope.current.volume;
     localStorage["music_volume"] = $scope.current.volume;
-  })
-  $scope.$watch('musiclist._version', function() {
-    $scope.currentlist = $scope.musiclist.toArray();
-    localStorage['musiclist'] = JSON.stringify($scope.musiclist);
   })
   $scope.$watch('current.cid', function() {
     var i = $scope.current.cid, len = $scope.currentlist.length;
