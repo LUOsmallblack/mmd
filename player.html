@@ -9,10 +9,11 @@
   <script src="js/jquery-ui.min.js"></script>
   <script src="js/angular.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="js/Dexie.min.js"></script>
   <script src="js/player.js"></script>
 </head>
 <body ng-app="ngAppPlayer" data-ng-controller="MusicListController" ng-csp class="ng-scope">
-  <div id="clouds-music-movement-door-player" style="position:absolute; left:0; top:0; height:0; width:0" onclick="playLast()" hidden></div>
+  <div id="clouds-music-movement-door-player" style="position:absolute; left:0; top:0; height:0; width:0" hidden></div>
   <nav class="ctrl-panel navbar navbar-fixed-top">
     <div class="container">
       <div class="row">
@@ -48,10 +49,10 @@
       </div>
       <div class="control">
         <div class="control-center btn-group">
-          <button type="button" class="btn btn-default btnctrl-prev" aria-label="Prev" ng-click="current.cid=current.cid-1"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
-          <button type="button" class="btn btn-default btnctrl-play" aria-label="Play" ng-click="current.playing = true" ng-if="!current.playing" disabled="{{!currentlist.length}}"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+          <button type="button" class="btn btn-default btnctrl-prev" aria-label="Prev" ng-click="ctrl.prevcid(current)"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+          <button type="button" class="btn btn-default btnctrl-play" aria-label="Play" ng-click="current.playing = true" ng-if="!current.playing" ng-disabled="!currentlist.length"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
           <button type="button" class="btn btn-default btnctrl-pause" aria-label="Pause" ng-click="current.playing = false" ng-if="current.playing"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>
-          <button type="button" class="btn btn-default btnctrl-next" aria-label="Next" ng-click="current.cid=current.cid+1"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
+          <button type="button" class="btn btn-default btnctrl-next" aria-label="Next" ng-click="ctrl.nextcid(current)"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></button>
         </div>
       </div>
     </div>
@@ -63,7 +64,8 @@
         </div>
         <div class="col-md-7">
           <table class="musiclist table table-striped table-hover">
-            <tr class="musiclist-item" ng-repeat="music in currentlist track by $index" ng-class="{'warning': current.cid==$index}" ng-dblclick="current.cid=$index" ondblclick="return false">
+            <tr class="musiclist-item" ng-repeat="music in currentlist track by $index" ng-class="{'warning': current.cid==music.id}" ng-dblclick="current.cid=music.id" ondblclick="return false">
+              <td hidden>{{ music.id }}</td>
               <td class="musiclist-id">{{ $index + 1 }}</td>
               <td class="musiclist-title">{{ music.title }}</td>
               <td class="musiclist-author">{{ music.artist }}</td>
@@ -77,7 +79,7 @@
   <div class="modal fade" id="songInfoModal" tabindex="-1" role="dialog" aria-labelledby="songInfoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form ng-submit="listctrl.add()">
+        <form ng-submit="ctrl.add()">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="songInfoModalLabel">Add Song by URL</h4>

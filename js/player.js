@@ -1,40 +1,28 @@
-var MusicList = function(l) {
-  this._list = l || [];
-  this._version = 0;
+function errlog(str) {
+  return function(err) {console.log(str + " : " + err)}
 }
 
-MusicList.prototype.filter = function(callback, thisArg) {
-  return new MusicList(l.filter(callback, thisArg));
-};
+var db = new Dexie("MusicPlayer");
+// TODO: music-artist, lyc-artist, and lyc-content, origin-url
+db.version(1).stores({musiclist:"++id,title,artist,uri,date,deleted,random,*tags"});
+db.open().catch(errlog("Open database failed"));
+db.musiclist.hook("creating", function(PK, obj, tran) {
+  obj.date = new Date().toISOString();
+  obj.random = Math.random();
+  obj.tags = obj.tags || [];
+});
 
-MusicList.prototype.toArray = function() {
-  return this._list.slice();
-}
+var MusicList = function(m) {}
 
-MusicList.prototype.sorted = function(compareFunction) {
-  return new MusicList(l.slice().sort(compareFunction));
-}
-
-MusicList.prototype.sortedBy = function(keyName) {
-  return this.sorted(function(a, b) {
-    if (a[keyName] < b[keyName]) {
-      return -1;
-    } else if (a[keyName] > b[keyName]) {
-      return 1;
-    }
-    return 0;
-  })
+MusicList.prototype.toArray = function(mode, func) {
+  if (mode == "random") {
+    return db.musiclist.orderBy(mode).toArray(func).catch(errlog("toArray failed"));
+  }
+  return db.musiclist.toArray(func).catch(errlog("toArray failed"));
 }
 
 MusicList.prototype.push = function(entry) {
-  // title, artist, uri, date, deleted(optional), order, random
-  // TODO: music-artist, lyc-artist, and lyc-content, origin-url
-  // TODO: tag
-  entry.date = new Date().toISOString();
-  entry.order = this._list.length;
-  entry.random = Math.random();
-  this._list.push(entry);
-  this._version += 1;
+  db.musiclist.add(entry).catch(errlog("add entry failed"));
 }
 
 musiclist = new MusicList();
@@ -113,45 +101,32 @@ app.directive('ngSetFocus',function($timeout) {
 
 app.controller("MusicListController", ["$scope", function MusicListController($scope) {
   $scope.current = {
-    cid: 0,
+    cii: null,
+    cid: null,
     time: 0,
     duration: 0,
     buffered: [],
     volume: 1,
   };
+  scope = $scope;
 
   // retrive volumn in local storage
   if (localStorage["music_volume"] != null) {
     $scope.current.volume = localStorage["music_volume"]*1;
   }
 
-  // retrive music list in local storage
-  if (localStorage['musiclist'] != null) {
-    musiclist = new MusicList(JSON.parse(localStorage['musiclist']));
-  }
-  $scope.musiclist = musiclist;
-  $scope.currentlist = musiclist.toArray();
-
-  $scope.listctrl = {
-    add: function(tmp) {
-      var x = {};
-      if (tmp) {
-        x.title = tmp.title;
-        x.artist = tmp.artist;
-        x.uri = tmp.uri;
-      } else {
-        x.title = $("#tmp-title").val();
-        x.artist = $("#tmp-artist").val();
-        x.uri = $("#tmp-uri").val();
-        $("#songInfoModal").modal('hide');
-      }
-      musiclist.push(x);
-    },
-  }
-  playLast = function() {
-    $scope.current.cid = -1;
+  function setMusiclist(ml) {
+    $scope.currentlist = ml || $scope.currentlist || [];
+    if ($scope.current.cid == null && $scope.currentlist.length) {
+      $scope.current.cid = $scope.currentlist[0].id;
+    }
     $scope.$apply();
   }
+
+  // retrive music list in local storage
+  $scope.musiclist = musiclist;
+  $scope.currentlist = [];
+  musiclist.toArray("order", setMusiclist);
 
   $scope.utils = {
     timeToPercent: function(time) {
@@ -177,7 +152,62 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     pause: function() { $scope.audio.pause(); },
     set: function(uri) { $scope.audio.src = uri; },
     setvolume: function(vol) { $scope.audio.volume = vol; },
-  }
+    add: function(tmp) {
+      var x = {};
+      if (tmp) {
+        x.title = tmp.title;
+        x.artist = tmp.artist;
+        x.uri = tmp.uri;
+      } else {
+        x.title = $("#tmp-title").val();
+        x.artist = $("#tmp-artist").val();
+        x.uri = $("#tmp-uri").val();
+        $("#songInfoModal").modal('hide');
+      }
+      $scope.musiclist.push(x);
+    },
+    checkcid: function() {
+      var len = $scope.currentlist.length;
+      if ($scope.current.cid == null || len == 0) {
+        $scope.current.cii = null;
+        $scope.current.cid = null;
+        return i;
+      }
+      var i = $scope.current.cii, d = $scope.current.cid;
+      if (i != null) {
+        i=(i % len + len) % len;
+        if ($scope.currentlist[i].id == d) {
+          $scope.current.cii = i;
+          return i;
+        }
+      }
+      for (i = $scope.currentlist.length - 1; i >= 0; i--) {
+        if ($scope.currentlist[i].id == d) {
+          $scope.current.cii = i;
+          return i;
+        }
+      }
+      $scope.current.cii = null;
+      $scope.current.cid = null;
+      return null;
+    },
+    nextcid: function() {
+      var i = $scope.ctrl.checkcid();
+      if (i != null) {
+        i = (i+1) % $scope.currentlist.length;
+        $scope.current.cii = i;
+        $scope.current.cid = $scope.currentlist[i].id;
+      }
+    },
+    prevcid: function() {
+      var i = $scope.ctrl.checkcid();
+      if (i != null) {
+        i = (i + $scope.currentlist.length - 1) % $scope.currentlist.length;
+        $scope.current.cii = i;
+        $scope.current.cid = $scope.currentlist[i].id;
+      }
+    },
+  };
 
   $($scope.audio).bind({
     "loadstart": function() {
@@ -203,7 +233,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     },
     "ended": function() {
       $scope.current.playing = false;
-      $scope.current.cid = $scope.current.cid + 1;
+      $scope.ctrl.nextcid();
       $scope.$apply();
     },
     "progress": function() {
@@ -221,40 +251,34 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
   });
   $scope.$watch('current.uri', function() {
     $scope.current.showuri = $scope.current.uri;
-  })
+  });
   $scope.$watch('current.time', function() {
     $scope.audio.currentTime = $scope.current.time;
-  })
+  });
   $scope.$watch('current.playing', function(newval, oldval) {
     if (newval)
       $scope.audio.play();
     else
       $scope.audio.pause();
-  })
+  });
   $scope.$watch('current.volume', function() {
     $scope.audio.volume = $scope.current.volume;
     localStorage["music_volume"] = $scope.current.volume;
-  })
-  $scope.$watch('musiclist._version', function() {
-    $scope.currentlist = $scope.musiclist.toArray();
-    localStorage['musiclist'] = JSON.stringify($scope.musiclist._list);
-  })
+  });
   $scope.$watch('current.cid', function() {
-    var i = $scope.current.cid, len = $scope.currentlist.length;
-    if (len == 0) {
+    var i = $scope.ctrl.checkcid();
+    if (i == null) {
       $scope.current.title = "Empty";
       $scope.current.artist = "";
       $scope.audio.src = "";
       $scope.audio.pause();
       return;
     }
-    i = (i % len + len) % len;
-    $scope.current.cid = i;
     $scope.current.title = $scope.currentlist[i].title;
     $scope.current.artist = $scope.currentlist[i].artist;
     $scope.audio.src = $scope.currentlist[i].uri;
     $scope.audio.play();
-  })
+  });
   $(document).ready(function() {
     $(".progress-handle").draggable({
       cursor: 'pointer',
