@@ -215,3 +215,16 @@ input, textarea {
 .musiclist-author {
   width: 150px;
 }
+
+.musiclist-action {
+  width: 80px;
+}
+
+.musiclist-action button {
+  padding: 0px;
+  text-align: center;
+  border: 0px;
+  color: black;
+  background: transparent;
+  transition: color .2s ease-in-out;
+}

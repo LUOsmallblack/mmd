@@ -12,7 +12,11 @@ db.musiclist.hook("creating", function(PK, obj, tran) {
   obj.tags = obj.tags || [];
 });
 
-var MusicList = function(m) {}
+db.musiclist.hook("creating", function() { UpdateMusicList(); });
+db.musiclist.hook("updating", function() { UpdateMusicList(); });
+db.musiclist.hook("deleting", function() { UpdateMusicList(); });
+
+var MusicList = function() {}
 
 MusicList.prototype.toArray = function(mode, func) {
   if (mode == "random") {
@@ -23,6 +27,12 @@ MusicList.prototype.toArray = function(mode, func) {
 
 MusicList.prototype.push = function(entry) {
   db.musiclist.add(entry).catch(errlog("add entry failed"));
+  this.toArray()
+}
+
+MusicList.prototype.delete = function(cid) {
+  console.log("deleting", cid);
+  db.musiclist.delete(cid).catch(errlog("delete entry failed"));
 }
 
 musiclist = new MusicList();
@@ -107,6 +117,7 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     duration: 0,
     buffered: [],
     volume: 1,
+    mode: "order"
   };
   scope = $scope;
 
@@ -115,18 +126,20 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
     $scope.current.volume = localStorage["music_volume"]*1;
   }
 
-  function setMusiclist(ml) {
-    $scope.currentlist = ml || $scope.currentlist || [];
-    if ($scope.current.cid == null && $scope.currentlist.length) {
-      $scope.current.cid = $scope.currentlist[0].id;
-    }
-    $scope.$apply();
+  UpdateMusicList = function() {
+    musiclist.toArray($scope.mode, function(ml) {
+      $scope.currentlist = ml || $scope.currentlist || [];
+      if ($scope.current.cid == null && $scope.currentlist.length) {
+        $scope.current.cid = $scope.currentlist[0].id;
+      }
+      $scope.$apply();
+    });
   }
 
   // retrive music list in local storage
   $scope.musiclist = musiclist;
   $scope.currentlist = [];
-  musiclist.toArray("order", setMusiclist);
+  UpdateMusicList();
 
   $scope.utils = {
     timeToPercent: function(time) {
@@ -207,6 +220,13 @@ app.controller("MusicListController", ["$scope", function MusicListController($s
         $scope.current.cid = $scope.currentlist[i].id;
       }
     },
+    deletecid: function(cid) {
+      if (cid == $scope.current.cid) {
+        $scope.ctrl.nextcid();
+      }
+      $scope.musiclist.delete(cid);
+      UpdateMusicList()
+    }
   };
 
   $($scope.audio).bind({
