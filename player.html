@@ -69,6 +69,9 @@
               <td class="musiclist-id">{{ $index + 1 }}</td>
               <td class="musiclist-title">{{ music.title }}</td>
               <td class="musiclist-author">{{ music.artist }}</td>
+              <td class="musiclist-action">
+                <button class="btn btn-primary" ng-click="ctrl.deletecid(music.id)">X</button>
+              </td>
             </tr>
           </table>
           <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#songInfoModal">Add Song</button>
